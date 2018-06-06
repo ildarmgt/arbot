@@ -1,0 +1,28 @@
+{
+  "extends": "standard",
+
+  "rules": {
+    "semi": ["error", "always"],
+    "no-extra-semi": "error",
+    "indent": ["error", 2],
+    "no-unused-vars": ["warn", { "vars": "local"}],
+    "camelcase": ["off", {"properties": "never"}],
+    "padded-blocks": "off",
+    "no-undef": "warn",
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error"
+  },
+
+  "globals": {
+    "React": false
+  },
+
+  "plugins": [
+    "react"
+  ],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  }
+}
