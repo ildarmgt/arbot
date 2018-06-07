@@ -2,49 +2,103 @@
 
 // initial user defined parameters
 let st = {}; // local state
-st.botStepMilliseconds = 30000; // ms to pause between bot loop executions
-st.coin1 = 'XMR'; // coin1 in coin1/coin2
-st.coin2 = 'BTC'; // coin2 in coin1/coin2
-st.sourceRef = 'hitbtc'; // read price here
-st.sourceTrade = 'cryptopia'; // trade here
-st.sourceTradeDelay = 500; // delay between API calls (ms)
-st.sourceTradeDelayLimit = 200; // min call delay between calls (ms)
-st.offsetPercent = 1; // percent offset from reference price for bids and asks
-st.orderFraction = 0.95; // fraction of available coins to place order with
+st.jobs = []; // store each job/action to get done
+st.bots = []; // store each trading pair into separate bots
+st.exchanges = {}; // store initialized exchanges
+st.bots.push({
+  botStepMilliseconds: 30000, // ms to pause between bot loop executions
+  coin1: 'XMR', // coin1 in coin1/coin2
+  coin2: 'BTC', // coin2 in coin1/coin2
+  sourceRef: 'hitbtc', // read price here
+  sourceTrade: 'cryptopia', // trade here
+  sourceTradeDelay: 500, // delay between API calls (ms)
+  sourceTradeDelayLimit: 200, // min call delay between calls (ms)
+  offsetPercent: 1, // percent offset from reference price for bids and asks
+  orderFraction: 0.95 // fraction of available coins to place order with
+});
 
 // libraries
 const _ = require('lodash'); // useful math libarary
 const auth = require('./auth.json'); // import my personal authentication data
 const ccxt = require('ccxt'); // add the exchange libraries
 
-// initialize exchanges with auth info where necessary
-st.exchangeRef = new ccxt[st.sourceRef](); // eslint-disable-line
-st.exchangeTrade = new ccxt[st.sourceTrade]({ // eslint-disable-line
-  apiKey: auth[st.sourceTrade].PUBLIC_KEY,
-  secret: auth[st.sourceTrade].PRIVATE_KEY,
-  enableRateLimit: true,
-  rateLimit: _.round(st.sourceTradeDelayLimit)
-});
-
 // initialize the bot
 startBot();
 
 console.log('Reached the end of server.js file');
+
 // ===================== END =========================
 
 // --- async functions ------
 
 async function startBot () {
   // initialize the bot once
-  try {
-    await st.exchangeRef.loadMarkets(); // load all the pairs info from API
-    await st.exchangeTrade.loadMarkets(); // load all the pairs info from API
-  } catch (e) { console.error('ERROR: loadMarkets()\n', e); }
 
+  // initialize exchanges with auth info where necessary
+  st.bots.forEach((bot, i) => {
+
+    if (!st.exchanges[bot.sourceRef]) {
+      // get reference exchange handle if not added yet
+      st.exchanges[bot.sourceRef] = new ccxt[bot.sourceRef]();
+
+      // initialize new exchange by name
+      loadMarkets(bot.sourceRef);
+    }
+
+    if (!st.exchanges[bot.sourceTrade]) {
+      // get trade exchange handle if not added yet
+      st.exchanges[bot.sourceTrade] = new ccxt[bot.sourceTrade]({
+        apiKey: auth[bot.sourceTrade].PUBLIC_KEY,
+        secret: auth[bot.sourceTrade].PRIVATE_KEY,
+        enableRateLimit: true,
+        rateLimit: _.round(st.sourceTradeDelayLimit)
+      });
+
+      // initialize new exchange by name
+      runLoadMarkets(bot.sourceTrade);
+    }
+  });
+
+  // run job executioner loop
+  runJobs();
+
+  // run the main bot loop
   loopBot();
+
+  // (TODO) how to create jobs - big loop doing step by step job adds
+}
+
+// required initialization of an exchange
+async function runLoadMarkets (exchangeName) {
+  try {
+    await st.exchanges[exchangeName].loadMarkets(); // load all the pairs info from API
+  } catch (e) { console.error('failed loadMarkets() for ', exchangeName, e); }
+}
+
+async function runFetchTicker (eaJob, jobIndex) {
+  // remove job from job list
+  st.jobs.splice(jobIndex, 1);
+
+  // (DELAY) get price info based on exchange name & pair stored in the job
+  let fetchedTicker = await st.exchanges[eaJob.exchange].fetchTicker(eaJob.pair);
+
+  // store price info in the state
+  if (!st.exchanges[eaJob.exchange]) st.exchanges[eaJob.exchange] = {};
+  st.exchanges[eaJob.exchange][eaJob.coin1 + '-' + eaJob.coin2] = fetchedTicker;
+}
+
+async function runJobs () {
+  st.jobs.forEach((eaJob, jobIndex) => {
+    if (eaJob.name === 'fetchTicker') runFetchTicker(eaJob, jobIndex);
+  });
 }
 
 async function loopBot () {
+
+  // loopBot();
+}
+
+async function loopBot2 () {
   // repeat this bot logic on a loop
 
   st.pair = st.coin1 + '/' + st.coin2;
