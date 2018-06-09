@@ -15,9 +15,10 @@ st.bots.push({
   sourceRefDelay: 100, // delay between API calls (ms) for reference price exchange
   sourceRefDelayLimit: 10, // min call delay between calls (ms) for reference price exchange
   sourceTradeDelay: 500, // delay between API calls (ms) for trading exchange
-  sourceTradeDelayLimit: 1, // min call delay between calls (ms) for trading exchange
-  offsetPercent: 1, // percent offset from reference price for bids and asks
-  orderFraction: 0.95 // fraction of available coins to place order with
+  sourceTradeDelayLimit: 30, // min call delay between calls (ms) for trading exchange
+  offsetPercent: 0.6, // percent offset from reference price for bids and asks
+  orderFraction: 0.95, // fraction of available coins to place order with
+  sourceUSD: 'bitstamp'
 });
 
 // libraries
@@ -32,7 +33,7 @@ console.log('Reached the end of server.js file');
 
 // ===================== END =========================
 
-// --- async functions ------
+// --- main functions ------
 
 async function startBot () {
   // initialize the bot once
@@ -53,7 +54,7 @@ async function startBot () {
       st.exchanges[bot.sourceRef].inUse = false;
 
       // testing
-      st.exchanges[bot.sourceRef].userAgent = '';
+      // st.exchanges[bot.sourceRef].userAgent = '';
 
       // initialize new exchange by name
       await runLoadMarkets(bot.sourceRef);
@@ -70,9 +71,6 @@ async function startBot () {
       });
       console.log(st.exchanges[bot.sourceTrade].id, 'exchange initialized');
 
-      // testing
-      st.exchanges[bot.sourceTrade].userAgent = '';
-
       // set timer params
       st.exchanges[bot.sourceTrade].lastUsed = new Date().getTime();
       st.exchanges[bot.sourceTrade].inUse = false;
@@ -80,6 +78,21 @@ async function startBot () {
       // initialize new exchange by name
       await runLoadMarkets(bot.sourceTrade);
     }
+
+    // usd exchange third
+    if (!st.exchanges[bot.sourceUSD]) {
+      // get trade exchange handle if not added yet
+      st.exchanges[bot.sourceUSD] = new ccxt[bot.sourceUSD]();
+      console.log(st.exchanges[bot.sourceUSD].id, 'exchange initialized');
+
+      // set timer params
+      st.exchanges[bot.sourceUSD].lastUsed = new Date().getTime();
+      st.exchanges[bot.sourceUSD].inUse = false;
+
+      // initialize new exchange by name
+      await runLoadMarkets(bot.sourceUSD);
+    }
+
   }
 
   // run the main bot loop that generates jobs
@@ -107,10 +120,20 @@ async function loopBot () {
     timestamp: new Date().getTime()
   });
 
+  st.jobs.push({ name: 'fetchTicker',
+    id: st.jobId++,
+    exchange: 'bitstamp',
+    coin1: 'BTC',
+    coin2: 'USD',
+    sourceDelay: waitfor,
+    timestamp: new Date().getTime()
+  });
+
   st.jobs.push({ name: 'fetch_balance',
     id: st.jobId++,
     exchange: 'cryptopia',
     sourceDelay: waitfor,
+    sourceUSD: 'bitstamp',
     timestamp: new Date().getTime()
   });
 
@@ -146,7 +169,7 @@ async function loopBot () {
   });
 
   console.log('End of loopBot job count:', st.jobs.length);
-  await new Promise(resolve => setTimeout(resolve, 30000));
+  await new Promise(resolve => setTimeout(resolve, 30000)); // delay
   loopBot();
 }
 
@@ -166,7 +189,6 @@ async function runJobs () {
     if (!inUse && enoughTimePassed) {
       // mark exchange as busy
       st.exchanges[eaJob.exchange].inUse = true;
-      // console.log(st.exchanges[eaJob.exchange].id, 'is busy');
 
       // remove done job from job list
       st.jobs.splice(jobIndex, 1);
@@ -195,7 +217,6 @@ async function runJobs () {
 function readyExchange (eaJob) {
   st.exchanges[eaJob.exchange].lastUsed = new Date().getTime(); // time stamp
   st.exchanges[eaJob.exchange].inUse = false; // done using
-  // console.log(st.exchanges[eaJob.exchange].id, 'is free & timer updated');
 }
 
 // required initialization of an exchange
@@ -252,6 +273,8 @@ async function runFetchBalance (eaJob) {
     console.error(st.exchanges[eaJob.exchange].id, ': failed job', eaJob);
   }
   readyExchange(eaJob);
+
+
 }
 
 // cancel all active orders
@@ -271,6 +294,11 @@ async function runCancelOrders (eaJob) {
 
   } catch (e) {
     console.error(st.exchanges[eaJob.exchange].id, ': failed cancel orders \n');
+    if (!eaJob.retry) {
+      eaJob.retry = true;
+      await new Promise(resolve => setTimeout(resolve, eaJob.sourceDelay));
+      await runCancelOrders(eaJob);
+    }
   }
   readyExchange(eaJob);
 }
@@ -306,6 +334,11 @@ async function runCreateLimitBuyOrder (eaJob) {
     }
   } catch (e) {
     console.error(st.exchanges[eaJob.exchange].id, ': failed buy order \n');
+    if (!eaJob.retry) {
+      eaJob.retry = true;
+      await new Promise(resolve => setTimeout(resolve, eaJob.sourceDelay));
+      await runCreateLimitBuyOrder(eaJob);
+    }
   }
   readyExchange(eaJob);
 }
@@ -341,11 +374,16 @@ async function runCreateLimitSellOrder (eaJob) {
     }
   } catch (e) {
     console.error(st.exchanges[eaJob.exchange].id, ': failed sell order \n');
+    if (!eaJob.retry) {
+      eaJob.retry = true;
+      await new Promise(resolve => setTimeout(resolve, eaJob.sourceDelay));
+      await runCreateLimitSellOrder(eaJob);
+    }
   }
   readyExchange(eaJob);
 }
 
-async function loopBot2 () {
+async function oldBot2 () {
   // repeat this bot logic on a loop
 
   st.pair = st.coin1 + '/' + st.coin2;
