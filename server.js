@@ -97,7 +97,7 @@ async function startBot () {
 
   // run the main bot loop that generates jobs
   console.log('starting bot loop');
-  loopBot();
+  loopBots();
 
   // run job execution loop
   console.log('starting job running loop');
@@ -107,11 +107,12 @@ async function startBot () {
 }
 
 // this goes through all the bots and generates necessary jobs
-async function loopBot () {
+async function loopBots () {
 
   let waitfor = 300;
 
-  st.jobs.push({ name: 'fetchTicker',
+  st.jobs.push({ // get ref price
+    name: 'fetchTicker',
     id: st.jobId++,
     exchange: 'hitbtc',
     coin1: 'XMR',
@@ -120,7 +121,8 @@ async function loopBot () {
     timestamp: new Date().getTime()
   });
 
-  st.jobs.push({ name: 'fetchTicker',
+  st.jobs.push({ // get useful BTC/USD value
+    name: 'fetchTicker',
     id: st.jobId++,
     exchange: 'bitstamp',
     coin1: 'BTC',
@@ -129,7 +131,8 @@ async function loopBot () {
     timestamp: new Date().getTime()
   });
 
-  st.jobs.push({ name: 'fetch_balance',
+  st.jobs.push({ // get balances
+    name: 'fetch_balance',
     id: st.jobId++,
     exchange: 'cryptopia',
     sourceDelay: waitfor,
@@ -137,14 +140,16 @@ async function loopBot () {
     timestamp: new Date().getTime()
   });
 
-  st.jobs.push({ name: 'cancelOrders',
+  st.jobs.push({ // cancel previous orders
+    name: 'cancelOrders',
     id: st.jobId++,
     exchange: 'cryptopia',
     sourceDelay: waitfor,
     timestamp: new Date().getTime()
   });
 
-  st.jobs.push({ name: 'createLimitBuyOrder',
+  st.jobs.push({ // place buy order
+    name: 'createLimitBuyOrder',
     id: st.jobId++,
     exchange: 'cryptopia',
     coin1: 'XMR',
@@ -156,7 +161,8 @@ async function loopBot () {
     timestamp: new Date().getTime()
   });
 
-  st.jobs.push({ name: 'createLimitSellOrder',
+  st.jobs.push({ // place sell order
+    name: 'createLimitSellOrder',
     id: st.jobId++,
     exchange: 'cryptopia',
     coin1: 'XMR',
@@ -169,8 +175,11 @@ async function loopBot () {
   });
 
   console.log('End of loopBot job count:', st.jobs.length);
+
+  printBalances();
+
   await new Promise(resolve => setTimeout(resolve, 30000)); // delay
-  loopBot();
+  loopBots();
 }
 
 async function runJobs () {
@@ -242,7 +251,7 @@ async function runFetchTicker (eaJob) {
 
     console.log(
       st.exchanges[eaJob.exchange].id,
-      'successful fetchTicker',
+      ': successful fetchTicker',
       st.exchanges[eaJob.exchange][pair].last,
       st.exchanges[eaJob.exchange][pair].symbol
     );
@@ -266,14 +275,13 @@ async function runFetchBalance (eaJob) {
 
     console.log(
       st.exchanges[eaJob.exchange].id,
-      'successful fetch_balance'
+      ': successful fetch_balance'
     );
 
   } catch (e) {
     console.error(st.exchanges[eaJob.exchange].id, ': failed job', eaJob);
   }
   readyExchange(eaJob);
-
 
 }
 
@@ -289,11 +297,11 @@ async function runCancelOrders (eaJob) {
 
     console.log(
       st.exchanges[eaJob.exchange].id,
-      'successful cancel orders'
+      ': successful cancel orders'
     );
 
   } catch (e) {
-    console.error(st.exchanges[eaJob.exchange].id, ': failed cancel orders \n');
+    console.error(st.exchanges[eaJob.exchange].id, ': failed cancel orders');
     if (!eaJob.retry) {
       eaJob.retry = true;
       await new Promise(resolve => setTimeout(resolve, eaJob.sourceDelay));
@@ -327,13 +335,13 @@ async function runCreateLimitBuyOrder (eaJob) {
 
       console.log(
         st.exchanges[eaJob.exchange].id,
-        'successful buy order placed'
+        ': successful buy order placed'
       );
     } else {
       console.log(st.exchanges[eaJob.exchange].id, eaJob.coin2, 'balance too low for buy order');
     }
   } catch (e) {
-    console.error(st.exchanges[eaJob.exchange].id, ': failed buy order \n');
+    console.error(st.exchanges[eaJob.exchange].id, ': failed buy order');
     if (!eaJob.retry) {
       eaJob.retry = true;
       await new Promise(resolve => setTimeout(resolve, eaJob.sourceDelay));
@@ -367,13 +375,13 @@ async function runCreateLimitSellOrder (eaJob) {
 
       console.log(
         st.exchanges[eaJob.exchange].id,
-        'successful sell order placed'
+        ': successful sell order placed'
       );
     } else {
       console.log(st.exchanges[eaJob.exchange].id, eaJob.coin1, 'balance too low for buy order');
     }
   } catch (e) {
-    console.error(st.exchanges[eaJob.exchange].id, ': failed sell order \n');
+    console.error(st.exchanges[eaJob.exchange].id, ': failed sell order');
     if (!eaJob.retry) {
       eaJob.retry = true;
       await new Promise(resolve => setTimeout(resolve, eaJob.sourceDelay));
@@ -383,66 +391,64 @@ async function runCreateLimitSellOrder (eaJob) {
   readyExchange(eaJob);
 }
 
-async function oldBot2 () {
-  // repeat this bot logic on a loop
+// print balances in original, BTC, and USD
+function printBalances () {
 
-  st.pair = st.coin1 + '/' + st.coin2;
-  st.minAmountLimitUnit2 = st.exchangeTrade.markets[st.pair].info.MinimumBaseTrade;
+  let holdings = {};
+  let totalBTC = 0;
+  let totalUSD = 0;
 
-  // get pair price info
-  try {
-    st.priceInfo = await st.exchangeRef.fetchTicker(st.pair);
-    st.priceAvg = _.floor(0.5 * st.priceInfo.bid + 0.5 * st.priceInfo.ask, 8);
-    console.log(st.exchangeRef.id, 'reference price:', st.priceAvg.toFixed(8), st.priceInfo.symbol);
-  } catch (e) { console.error('ERROR: fetchTicker', e); }
+  // temp solution, later to be gotten from reference exchanges in all the bots
+  let referenceExchanges = {
+    'XMR/BTC': 'hitbtc',
+    'BTC/USD': 'bitstamp'
+  };
 
-  // get all account balances
-  try {
-    st.balances = await st.exchangeTrade.fetch_balance();
-    console.log(st.exchangeTrade.id, st.balances.XMR.total.toFixed(8), st.coin1);
-    console.log(st.exchangeTrade.id, st.balances.BTC.total.toFixed(8), st.coin2);
-    await new Promise(resolve => setTimeout(resolve, st.sourceTradeDelay)); // delay ms
-  } catch (e) { console.error('ERROR: fetch_balance', e); }
+  console.log('===============================================');
+  console.log('                   BALANCES                    ');
+  console.log('-----------------------------------------------');
 
-  console.log('\n');
-
-  // cancel all orders
-  try {
-    await st.exchangeTrade.cancelOrder(undefined, undefined, {Type: 'All'});
-    console.log('All previous orders removed!');
-    await new Promise(resolve => setTimeout(resolve, st.sourceTradeDelay)); // delay ms
-  } catch (e) { console.error('Canceled no previous orders'); }
-
-  // place new updated orders
-  // e.g. amount measured in Coin1 and price measured in Coin2 for Coin1/Coin2 on cryptopia
-
-  try {
-    let buyOrderPrice = _.floor(st.priceAvg * (100 - st.offsetPercent) / 100.0, 8);
-    let buyOrderAmmountUnit2 = _.floor(st.balances[st.coin2].total * st.orderFraction, 8);
-    let buyOrderAmmountUnit1 = _.floor(buyOrderAmmountUnit2 / buyOrderPrice, 8);
-
-    if (buyOrderAmmountUnit2 > st.minAmountLimitUnit2) {
-      await st.exchangeTrade.createLimitBuyOrder(st.pair, buyOrderAmmountUnit1, buyOrderPrice);
-      console.log(st.exchangeTrade.id, 'bid:', buyOrderAmmountUnit1.toFixed(8), st.coin1, '@', buyOrderPrice.toFixed(8), st.pair);
-      await new Promise(resolve => setTimeout(resolve, st.sourceTradeDelay)); // delay ms
+  // collect non-zero balances across all accounts
+  for (let exchangeKey in st.exchanges) {
+    for (let coinKey in st.exchanges[exchangeKey].balances) {
+      let balance = st.exchanges[exchangeKey].balances[coinKey].total;
+      if (balance > 0) {
+        holdings[coinKey] = { value: balance };
+      }
     }
-  } catch (e) { console.error('Failed attempt to createLimitBuyOrder'); }
+  }
 
-  try {
-    let sellOrderPrice = _.floor(st.priceAvg * (100 + st.offsetPercent) / 100.0, 8);
-    let sellOrderAmmountUnit1 = _.floor(st.balances[st.coin1].total * st.orderFraction, 8);
-    let sellOrderAmmountUnit2 = _.floor(sellOrderAmmountUnit1 * sellOrderPrice, 8);
+  // convert all balances to BTC and USD if possible
+  for (let coinKey in holdings) {
+    // get conversion factor to BTC
+    let conversionFactorToBTC = (coinKey === 'BTC')
+      ? 1
+      : st.exchanges[referenceExchanges[coinKey + '/' + 'BTC']][coinKey + '/' + 'BTC'].last;
 
-    if (sellOrderAmmountUnit2 > st.minAmountLimitUnit2) {
-      await st.exchangeTrade.createLimitSellOrder(st.pair, sellOrderAmmountUnit1, sellOrderPrice);
-      console.log(st.exchangeTrade.id, 'ask:', sellOrderAmmountUnit1.toFixed(8), st.coin1, '@', sellOrderPrice.toFixed(8), st.pair);
-      await new Promise(resolve => setTimeout(resolve, st.sourceTradeDelay)); // delay ms
+    // calculate BTC value of all coins
+    if (conversionFactorToBTC) {
+      let btcValue = _.floor(holdings[coinKey].value * conversionFactorToBTC, 8);
+      holdings[coinKey].valueInBTC = btcValue;
+      totalBTC += btcValue || 0;
     }
-  } catch (e) { console.error('Failed attempt to createLimitSellOrder'); }
 
-  console.log('\n\n--- pause ---\n');
+    // get conversion factor BTC to USD
+    let conversionFactorToUSD = st.exchanges[referenceExchanges['BTC/USD']]['BTC/USD'].last;
+    // calculate USD value of all coins
+    if (conversionFactorToUSD) {
+      let usdValue = _.floor(holdings[coinKey].valueInBTC * conversionFactorToUSD, 8);
+      holdings[coinKey].valueInUSD = usdValue;
+      totalUSD += usdValue || 0;
+    }
 
-  await new Promise(resolve => setTimeout(resolve, st.botStepMilliseconds)); // delay X seconds
-  loopBot(); // loop itself
+    console.log(
+      holdings[coinKey].value.toFixed(8), coinKey, '(',
+      holdings[coinKey].valueInBTC.toFixed(8), 'BTC,',
+      holdings[coinKey].valueInUSD.toFixed(2), 'USD )'
+    );
+  }
+  console.log('-----------------------------------------------');
+  console.log('Total:', totalBTC.toFixed(8), 'BTC,', totalUSD.toFixed(2), 'USD');
+  console.log('===============================================');
 
 }
