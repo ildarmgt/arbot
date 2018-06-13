@@ -13,12 +13,12 @@ async function runBuyOrder (st, eaJob) {
   let buyOrderAmountUnit2 = _.floor(balanceCoin2 * eaJob.positionFraction, 8); // buy this much (coin2 units)
   let buyOrderAmountUnit1 = _.floor(buyOrderAmountUnit2 / buyOrderPrice, 8); // buy this much (coin1 units)
   let minimumBaseTradeUnit2 =
-    st.exchanges[eaJob.exchange].markets[pair].info.MinimumBaseTrade || 0.005; // min trade size (coin 2 units)
+    st.lib[eaJob.exchange].markets[pair].info.MinimumBaseTrade || 0.005; // min trade size (coin 2 units)
 
   try {
     if (buyOrderAmountUnit2 > minimumBaseTradeUnit2) {
       // (ASYNC) place buy order
-      await st.exchanges[eaJob.exchange].createLimitBuyOrder(
+      await st.lib[eaJob.exchange].createLimitBuyOrder(
         pair,
         buyOrderAmountUnit1,
         buyOrderPrice
@@ -34,8 +34,6 @@ async function runBuyOrder (st, eaJob) {
       console.log(st.exchanges[eaJob.exchange].id, eaJob.coin2, 'balance too low for buy order');
     }
 
-    readyExchange(st, eaJob); // say exchange not in use anymore and update timer
-
   } catch (e) {
     console.error(st.exchanges[eaJob.exchange].id, ': failed buy order');
     if (!eaJob.retry) {
@@ -44,6 +42,8 @@ async function runBuyOrder (st, eaJob) {
       await runBuyOrder(st, eaJob); // retry
     }
   }
+  readyExchange(st, eaJob); // say exchange not in use anymore and update timer
+
 }
 
 export default runBuyOrder;

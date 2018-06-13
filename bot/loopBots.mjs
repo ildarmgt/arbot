@@ -1,13 +1,15 @@
 'use strict';
 import printBalances from './totalBalances'; // calc & show total balances
 
+// (TODO) change from temporary creation of jobs to systematic using bot parameters, for now hard coded during testing
+
 /**
  * loopBots is a function that loops itself as it
  * goes through all the bots and generates necessary jobs
  */
 async function loopBots (st) {
 
-  let waitfor = 300;
+  let waitfor = 200;
 
   st.jobs.push({ // get ref price
     name: 'fetchTicker',

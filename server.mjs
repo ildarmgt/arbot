@@ -8,7 +8,8 @@ let st = { // local state
   jobId: 0, // count jobs
   bots: [], // store each trading pair into separate bots
   botId: 0, // count bots
-  exchanges: {}, // store initialized exchanges
+  lib: {}, // store initialized exchange libararies
+  exchanges: {}, // store data from exchanges
   data: {} // store performance data
 };
 

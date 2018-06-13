@@ -18,13 +18,14 @@ async function startBot (st) {
   // initialize exchanges with auth info where necessary
   // st.bots.forEach((bot) => {
   for (let bot of st.bots) {
-    // (TODO) combine both into one helper function
+    // (TODO) combine both into one helper function?
 
-    // reference exchange first
-    if (!st.exchanges[bot.sourceRef]) {
+    // 1. reference exchange first
+    if (!st.lib[bot.sourceRef]) {
       // get reference exchange handle if not added yet
-      st.exchanges[bot.sourceRef] = new ccxt[bot.sourceRef]();
-      console.log(st.exchanges[bot.sourceRef].id, 'exchange initialized');
+      st.lib[bot.sourceRef] = new ccxt[bot.sourceRef]();
+      st.exchanges[bot.sourceRef] = { id: st.lib[bot.sourceRef].id };
+      console.log(st.lib[bot.sourceRef].id, 'exchange initialized');
 
       // set timer params
       st.exchanges[bot.sourceRef].lastUsed = new Date().getTime();
@@ -34,16 +35,17 @@ async function startBot (st) {
       await runLoadMarkets(st, bot.sourceRef);
     }
 
-    // trade exchange second (if exists)
-    if (bot.sourceTrade && !st.exchanges[bot.sourceTrade]) {
+    // 2. trade exchange second (if exists)
+    if (bot.sourceTrade && !st.lib[bot.sourceTrade]) {
       // get trade exchange handle if not added yet
-      st.exchanges[bot.sourceTrade] = new ccxt[bot.sourceTrade]({
+      st.lib[bot.sourceTrade] = new ccxt[bot.sourceTrade]({
         apiKey: auth[bot.sourceTrade].PUBLIC_KEY,
         secret: auth[bot.sourceTrade].PRIVATE_KEY,
         enableRateLimit: false,
         rateLimit: _.round(bot.sourceTradeDelayLimit)
       });
-      console.log(st.exchanges[bot.sourceTrade].id, 'exchange initialized');
+      st.exchanges[bot.sourceTrade] = { id: st.lib[bot.sourceTrade].id };
+      console.log(st.lib[bot.sourceTrade].id, 'exchange initialized');
 
       // set timer params
       st.exchanges[bot.sourceTrade].lastUsed = new Date().getTime();

@@ -7,7 +7,7 @@ async function runCancelOrders (st, eaJob) {
   try {
 
     // (ASYNC) cancel all active orders
-    await st.exchanges[eaJob.exchange].cancelOrder(undefined, undefined, {Type: 'All'});
+    await st.lib[eaJob.exchange].cancelOrder(undefined, undefined, {Type: 'All'});
 
     // no changes to state
 
@@ -24,6 +24,7 @@ async function runCancelOrders (st, eaJob) {
       await runCancelOrders(st, eaJob);
     }
   }
+
   readyExchange(st, eaJob);
 }
 

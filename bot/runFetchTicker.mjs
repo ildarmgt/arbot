@@ -8,7 +8,7 @@ async function runFetchTicker (st, eaJob) {
     let pair = eaJob.coin1 + '/' + eaJob.coin2;
 
     // (ASYNC) get price info based on exchange name & pair stored in the job
-    let response = await st.exchanges[eaJob.exchange].fetchTicker(pair);
+    let response = await st.lib[eaJob.exchange].fetchTicker(pair);
 
     // store response info in the state
     st.exchanges[eaJob.exchange][pair] = response;
@@ -23,6 +23,7 @@ async function runFetchTicker (st, eaJob) {
   } catch (e) {
     console.error(st.exchanges[eaJob.exchange].id, ': failed job', eaJob);
   }
+
   readyExchange(st, eaJob);
 }
 
