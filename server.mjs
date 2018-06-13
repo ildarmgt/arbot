@@ -1,7 +1,6 @@
 'use strict';
 
-// libraries
-const startBot = require('./bot/startBot'); // starts the bot
+import startBot from './bot/startBot';
 
 // important variables
 let st = { // local state

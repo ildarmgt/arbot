@@ -1,7 +1,6 @@
 'use strict';
-const _ = require('lodash'); // useful math libarary
-
-const diffToDays = require('./helper/diffToDays'); // my helper to format run time
+import _ from 'lodash';
+import diffToDays from './helper/diffToDays';
 
 // print balances in original, BTC, and USD
 function totalBalances (st) {

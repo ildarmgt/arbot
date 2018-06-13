@@ -1,5 +1,5 @@
 'use strict';
-const _ = require('lodash'); // useful math libarary
+import _ from 'lodash'; // useful math libarary
 
 // takes difference in miliseconds and converts it to days hours minutes seconds format
 function diffToDays (inMS) {

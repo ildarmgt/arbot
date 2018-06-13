@@ -1,12 +1,12 @@
 'use strict';
-const runLoadMarkets = require('./runLoadMarkets');
-const loopBots = require('./loopBots');
-const loopJobs = require('./loopJobs');
+import runLoadMarkets from './runLoadMarkets';
+import loopBots from './loopBots';
+import loopJobs from './loopJobs';
 
 // libraries
-const _ = require('lodash'); // useful math libarary
-const auth = require('./auth.json'); // import my personal authentication data
-const ccxt = require('ccxt'); // add the exchange libraries
+import _ from 'lodash'; // useful math libarary
+import auth from '../auth.json'; // import my personal authentication data
+import ccxt from 'ccxt'; // add the exchange libraries
 
 /**
  * startBot is a function that initiates the exchanges

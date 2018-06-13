@@ -1,5 +1,5 @@
 'use strict';
-const printBalances = require('./printBalances'); // calc & show total balances
+import printBalances from './totalBalances'; // calc & show total balances
 
 /**
  * loopBots is a function that loops itself as it

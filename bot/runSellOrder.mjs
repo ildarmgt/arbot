@@ -1,8 +1,7 @@
 'use strict';
-const _ = require('lodash'); // useful math libarary
+import _ from 'lodash'; // useful math libarary
 
-const readyExchange = require('./readyExchange');
-const runCreateLimitSellOrder = require('./runCreateLimitSellOrder');
+import readyExchange from './readyExchange';
 
 // place buy order
 async function runSellOrder (st, eaJob) {
@@ -41,7 +40,7 @@ async function runSellOrder (st, eaJob) {
     if (!eaJob.retry) {
       eaJob.retry = true;
       await new Promise(resolve => setTimeout(resolve, eaJob.sourceDelay));
-      await runCreateLimitSellOrder(st, eaJob);
+      await runSellOrder(st, eaJob);
     }
   }
 }

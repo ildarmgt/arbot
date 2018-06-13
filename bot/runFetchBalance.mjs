@@ -1,6 +1,6 @@
 'use strict';
 
-const readyExchange = require('readyExchange');
+import readyExchange from './readyExchange';
 
 // get all account balances from an exchange of interest
 async function runFetchBalance (st, eaJob) {

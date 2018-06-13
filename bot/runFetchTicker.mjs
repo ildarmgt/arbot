@@ -1,5 +1,5 @@
 'use strict';
-const readyExchange = require('./readyExchange');
+import readyExchange from './readyExchange';
 
 // get price info & store it in state
 async function runFetchTicker (st, eaJob) {

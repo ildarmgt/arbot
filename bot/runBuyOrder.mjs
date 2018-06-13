@@ -1,7 +1,7 @@
 'use strict';
-const _ = require('lodash'); // useful math libarary
+import _ from 'lodash'; // useful math libarary
 
-const readyExchange = require('readyExchange');
+import readyExchange from './readyExchange';
 
 // place buy order
 async function runBuyOrder (st, eaJob) {

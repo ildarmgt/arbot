@@ -2,9 +2,10 @@
   "name": "arbot",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "server.mjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --experimental-modules server.mjs"
   },
   "author": "",
   "license": "ISC",

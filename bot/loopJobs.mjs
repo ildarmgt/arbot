@@ -1,9 +1,9 @@
 'use strict';
-const runFetchTicker = require('./runFetchTicker');
-const runFetchBalance = require('./runFetchBalance');
-const runCancelOrders = require('./runCancelOrders');
-const runBuyOrder = require('./runBuyOrder');
-const runSellOrder = require('./runSellOrder');
+import runFetchTicker from './runFetchTicker';
+import runFetchBalance from './runFetchBalance';
+import runCancelOrders from './runCancelOrders';
+import runBuyOrder from './runBuyOrder';
+import runSellOrder from './runSellOrder';
 
 async function loopJobs (st) {
   // console.log('.');

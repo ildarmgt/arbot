@@ -1,5 +1,5 @@
 'use strict';
-const readyExchange = require('readyExchange');
+import readyExchange from './readyExchange';
 
 // cancel all active orders
 async function runCancelOrders (st, eaJob) {
