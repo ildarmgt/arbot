@@ -6,8 +6,9 @@ st.jobs = []; // store each job/action to get done
 st.jobId = 0; // count jobs
 st.bots = []; // store each trading pair into separate bots
 st.exchanges = {}; // store initialized exchanges
+st.data = {}; // store performance data
 st.bots.push({
-  botStepMilliseconds: 30000, // ms to pause between bot loop executions
+  botStepDelay: 30000, // ms to pause between bot loop executions
   coin1: 'XMR', // coin1 in coin1/coin2
   coin2: 'BTC', // coin2 in coin1/coin2
   sourceRef: 'hitbtc', // read price here
@@ -16,7 +17,7 @@ st.bots.push({
   sourceRefDelayLimit: 10, // min call delay between calls (ms) for reference price exchange
   sourceTradeDelay: 500, // delay between API calls (ms) for trading exchange
   sourceTradeDelayLimit: 30, // min call delay between calls (ms) for trading exchange
-  offsetPercent: 0.6, // percent offset from reference price for bids and asks
+  offsetPercent: 0.7, // percent offset from reference price for bids and asks
   orderFraction: 0.95, // fraction of available coins to place order with
   sourceUSD: 'bitstamp'
 });
@@ -202,7 +203,7 @@ async function runJobs () {
       // remove done job from job list
       st.jobs.splice(jobIndex, 1);
 
-      console.log('executing job #', eaJob.id, eaJob.name);
+      // console.log('executing job #', eaJob.id, eaJob.name);
 
       let matchFound = false;
       if (eaJob.name === 'fetchTicker') { runFetchTicker(eaJob); matchFound = true; }
@@ -378,7 +379,7 @@ async function runCreateLimitSellOrder (eaJob) {
         ': successful sell order placed'
       );
     } else {
-      console.log(st.exchanges[eaJob.exchange].id, eaJob.coin1, 'balance too low for buy order');
+      console.log(st.exchanges[eaJob.exchange].id, eaJob.coin1, 'balance too low for sell order');
     }
   } catch (e) {
     console.error(st.exchanges[eaJob.exchange].id, ': failed sell order');
@@ -447,8 +448,39 @@ function printBalances () {
       holdings[coinKey].valueInUSD.toFixed(2), 'USD )'
     );
   }
+
+  // record first balances
+  // if first data isn't recorded yet, record it
+  if (!(st.data.firstBTC && st.data.firstUSD)) { // if even one of initial records don't exist, record this pass as initial
+    st.data.firstBTC = _.floor(totalBTC, 8);
+    st.data.firstUSD = _.floor(totalUSD, 2);
+    st.data.firstTime = new Date().getTime();
+  }
+
   console.log('-----------------------------------------------');
   console.log('Total:', totalBTC.toFixed(8), 'BTC,', totalUSD.toFixed(2), 'USD');
+  console.log('-----------------------------------------------');
+  console.log(
+    'BTC change:',
+    st.data.firstBTC ? _.round((totalBTC / st.data.firstBTC - 1.0) * 100.0, 2).toFixed(2) + '%' : 'N/A',
+    'USD change:',
+    st.data.firstUSD ? _.round((totalUSD / st.data.firstUSD - 1.0) * 100.0, 2).toFixed(2) + '%' : 'N/A'
+  );
+  console.log('Run time:', st.data.firstTime ? diffToDays(new Date().getTime() - st.data.firstTime) : 'N/A');
   console.log('===============================================');
 
+}
+
+function diffToDays (inMS) {
+  let MSinSec = 1000;
+  let MSinMin = MSinSec * 60;
+  let MSinHour = MSinMin * 60;
+  let MSinDay = MSinHour * 24;
+
+  let days = _.floor(inMS / MSinDay);
+  let hours = _.floor((inMS % MSinDay) / MSinHour);
+  let minutes = _.floor((inMS % MSinDay % MSinHour) / MSinMin);
+  let seconds = _.floor((inMS % MSinDay % MSinHour % MSinMin) / MSinSec, 1);
+
+  return days + ' days ' + hours + ' hours ' + minutes + ' minutes ' + seconds.toFixed(1) + ' seconds';
 }

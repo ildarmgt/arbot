@@ -85,6 +85,63 @@
     },
   ```
 
+#### cryptopia.fetchMyTrades(pair, timestamp integer from which to start (inclusive) )
+  * gets 100 of my last trades
+
+  * returns array of length 100 of these objects:
+  ```
+  { id: '62317722',
+  info:
+   { TradeId: 62317722,
+     TradePairId: 2999,
+     Market: 'XMR/BTC',
+     Type: 'Sell',
+     Rate: 0.01974828,
+     Amount: 1.33496094,
+     Total: 0.02636318,
+     Fee: 0.00005273,
+     TimeStamp: '2018-06-10T18:40:01.955561' },
+  order: undefined,
+  timestamp: 1528656001955,
+  datetime: '2018-06-10T18:40:01.955Z',
+  symbol: 'XMR/BTC',
+  type: 'limit',
+  side: 'sell',
+  price: 0.01974828,
+  cost: 0.02636318,
+  amount: 1.33496094,
+  fee: { currency: 'BTC', cost: 0.00005273 } }
+  ```
+
+#### cryptopia.fetchTrades(pair, timestamp integer from which to start (inclusive) )
+  * gets all recent trades that happened on exchange
+  * returns a ~500 member array of these elements:
+
+ ```
+ { id: undefined,
+    info:
+      { TradePairId: 2999,
+        Label: 'XMR/BTC',
+        Type: 'Sell',
+        Price: 0.01995,
+        Amount: 0.23982811,
+        Total: 0.00478457,
+        Timestamp: 1528769863
+      },
+    order: undefined,
+    timestamp: 1528769863000,
+    datetime: '2018-06-12T02:17:43.000Z',
+    symbol: 'XMR/BTC',
+    type: 'limit',
+    side: 'sell',
+    price: 0.01995,
+    cost: 0.00478457,
+    amount: 0.23982811,
+    fee: undefined
+  }
+ ```
+
+
 #### cryptopia.loadMarkets()
 
 ```
