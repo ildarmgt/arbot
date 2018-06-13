@@ -1,0 +1,29 @@
+'use strict';
+const readyExchange = require('./readyExchange');
+
+// get price info & store it in state
+async function runFetchTicker (st, eaJob) {
+
+  try {
+    let pair = eaJob.coin1 + '/' + eaJob.coin2;
+
+    // (ASYNC) get price info based on exchange name & pair stored in the job
+    let response = await st.exchanges[eaJob.exchange].fetchTicker(pair);
+
+    // store response info in the state
+    st.exchanges[eaJob.exchange][pair] = response;
+
+    console.log(
+      st.exchanges[eaJob.exchange].id,
+      ': successful fetchTicker',
+      st.exchanges[eaJob.exchange][pair].last,
+      st.exchanges[eaJob.exchange][pair].symbol
+    );
+
+  } catch (e) {
+    console.error(st.exchanges[eaJob.exchange].id, ': failed job', eaJob);
+  }
+  readyExchange(st, eaJob);
+}
+
+export default runFetchTicker;
