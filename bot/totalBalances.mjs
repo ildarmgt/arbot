@@ -4,7 +4,7 @@ import diffToDays from './helper/diffToDays';
 // print balances in original, BTC, and USD
 export default async function totalBalances (st) {
   // delay
-  await new Promise(resolve => setTimeout(resolve, 15000));
+  await new Promise(resolve => setTimeout(resolve, 30000));
 
   let holdings = {};
   let totalBTC = 0;
@@ -13,7 +13,8 @@ export default async function totalBalances (st) {
   // temp solution, later to be gotten from reference exchanges in all the bots
   let referenceExchanges = {
     'XMR/BTC': 'hitbtc',
-    'BTC/USD': 'bitstamp'
+    'BTC/USD': 'bitstamp',
+    'LTC/BTC': 'gdax'
   };
 
   console.log('===============================================');

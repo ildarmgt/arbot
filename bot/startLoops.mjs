@@ -1,5 +1,5 @@
 import initializeExchanges from './initializeExchanges';
-import loopBots from './loopBots';
+import startBots from './startBots';
 import loopJobs from './loopJobs';
 import totalBalances from './totalBalances';
 /**
@@ -14,7 +14,7 @@ export default async function startLoops (st) {
 
   // run the main bot loop that generates jobs
   console.log('starting bot loop');
-  loopBots(st);
+  startBots(st);
 
   // run job execution loop
   console.log('starting job running loop');

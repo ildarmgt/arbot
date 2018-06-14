@@ -18,6 +18,7 @@ export default async function loopThisBot (st, bot) {
   }
 
   if (bot.type === 'arbot') {
+    // steps 2 & 3 need to be shared between bots on same exchange
 
     // 1) get ref price
     st.jobs.push({
@@ -30,23 +31,25 @@ export default async function loopThisBot (st, bot) {
       timestamp: new Date().getTime()
     });
 
-    // 2) cancel previous orders
-    st.jobs.push({
-      name: 'cancelOrders',
-      id: st.jobId++,
-      exchange: bot.sourceTrade,
-      exchangeDelay: bot.sourceTradeDelay,
-      timestamp: new Date().getTime()
-    });
+    if (bot.leadsSharedEvents) {
+      // 2) get updated account balances
+      st.jobs.push({
+        name: 'fetchBalances',
+        id: st.jobId++,
+        exchange: bot.sourceTrade,
+        exchangeDelay: bot.sourceTradeDelay,
+        timestamp: new Date().getTime()
+      });
 
-    // 3) get updated account balances
-    st.jobs.push({
-      name: 'fetchBalances',
-      id: st.jobId++,
-      exchange: bot.sourceTrade,
-      exchangeDelay: bot.sourceTradeDelay,
-      timestamp: new Date().getTime()
-    });
+      // 3) cancel previous orders
+      st.jobs.push({
+        name: 'cancelOrders',
+        id: st.jobId++,
+        exchange: bot.sourceTrade,
+        exchangeDelay: bot.sourceTradeDelay,
+        timestamp: new Date().getTime()
+      });
+    }
 
     // 4) place buy order
     st.jobs.push({
@@ -59,6 +62,7 @@ export default async function loopThisBot (st, bot) {
       offsetPercent: -bot.offsetPercent,
       positionFraction: bot.positionFraction,
       exchangeDelay: bot.sourceTradeDelay,
+      maxWaitTime: bot.botStepDelay / 2,
       timestamp: new Date().getTime()
     });
 
@@ -73,6 +77,7 @@ export default async function loopThisBot (st, bot) {
       offsetPercent: bot.offsetPercent,
       positionFraction: bot.positionFraction,
       exchangeDelay: bot.sourceTradeDelay,
+      maxWaitTime: bot.botStepDelay / 2,
       timestamp: new Date().getTime()
     });
   }

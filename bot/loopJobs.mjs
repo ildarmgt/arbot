@@ -5,7 +5,6 @@ import runBuyOrder from './runBuyOrder';
 import runSellOrder from './runSellOrder';
 
 async function loopJobs (st) {
-  // console.log('.');
 
   // st.jobs.forEach((eaJob, jobIndex) => {
   for (let jobIndex = 0; jobIndex < st.jobs.length; jobIndex++) {
@@ -42,7 +41,6 @@ async function loopJobs (st) {
       }
     }
   }
-  // });
 
   // loop job execution function with a small delay
   await new Promise(resolve => setTimeout(resolve, 100));

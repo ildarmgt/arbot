@@ -8,8 +8,6 @@ async function runCancelOrders (st, eaJob) {
     // (ASYNC) cancel all active orders
     await st.lib[eaJob.exchange].cancelOrder(undefined, undefined, {Type: 'All'});
 
-    // no changes to state
-
     console.log(
       st.exchanges[eaJob.exchange].id,
       ': successful cancel orders'
@@ -25,6 +23,10 @@ async function runCancelOrders (st, eaJob) {
   }
 
   readyExchange(st, eaJob);
+
+  // write down when last cancelation command ran.
+  // bot actions that share exchange know when it's ready for new orders.
+  st.exchanges[eaJob.exchange].lastCanceled = new Date().getTime();
 }
 
 export default runCancelOrders;

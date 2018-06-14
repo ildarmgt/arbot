@@ -6,7 +6,6 @@ import auth from '../auth.json'; // import my personal authentication data
 
 export default async function initializeExchanges (st) {
   for (let bot of st.bots) {
-    // (TODO) combine both into one helper function?
 
     // 1. reference exchange first
 
@@ -45,6 +44,12 @@ export default async function initializeExchanges (st) {
 
       // initialize new exchange by name
       await runLoadMarkets(st, bot.sourceTrade);
+
+      // trade exchange is where cancels and balance calls are made
+      // have to define which bot gets to do those calls for each one
+      // by placing it here, the first bot gets to cancel and fetch balances
+      // others just follow
+      st.exchanges[bot.sourceTrade].leadsSharedEvents = true;
 
       console.log(st.lib[bot.sourceTrade].id, 'exchange initialized');
     }

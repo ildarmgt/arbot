@@ -18,6 +18,11 @@ async function runFetchBalance (st, eaJob) {
 
   } catch (e) {
     console.error(st.exchanges[eaJob.exchange].id, ': failed job', eaJob);
+    if (!eaJob.retry) {
+      eaJob.retry = true;
+      await new Promise(resolve => setTimeout(resolve, eaJob.exchangeDelay));
+      await runFetchBalance(st, eaJob);
+    }
   }
 
   readyExchange(st, eaJob);
