@@ -1,5 +1,7 @@
-// this function loops the action (job) generation of a single bot
-// depending on type of bot it is, the job sequence will be different
+/**
+ * This function loops the action (job) generation of a single bot.
+ * Depending on type of bot it is, the job sequence will be different
+ */
 export default async function loopThisBot (st, bot) {
   console.log('Bot #', bot.id, 'type', bot.type, 'loop initiated');
   // generate jobs

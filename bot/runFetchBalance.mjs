@@ -1,6 +1,8 @@
 import readyExchange from './readyExchange';
 
-// get all account balances from an exchange of interest
+/**
+ * Get all account balances from an exchange in the job.
+ */
 async function runFetchBalance (st, eaJob) {
 
   try {

@@ -1,4 +1,6 @@
-// required initialization of an exchange
+/**
+ * Required initialization of an exchange.
+ */
 async function runLoadMarkets (st, exchangeName) {
   try {
     console.log(st.exchanges[exchangeName].id, ': loadMarkets() start');

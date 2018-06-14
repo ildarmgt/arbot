@@ -1,6 +1,8 @@
 import readyExchange from './readyExchange';
 
-// cancel all active orders
+/**
+ * Cancels all orders on exchange in the job
+ */
 async function runCancelOrders (st, eaJob) {
 
   try {

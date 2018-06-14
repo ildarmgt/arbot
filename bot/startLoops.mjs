@@ -2,9 +2,10 @@ import initializeExchanges from './initializeExchanges';
 import startBots from './startBots';
 import loopJobs from './loopJobs';
 import totalBalances from './totalBalances';
+
 /**
- * startLoops is a function that initiates
- * all the necessary async loops. Runs once.
+ * A function that initiates all the necessary async loops.
+ * These include the individual bots, job execution, and performance calculations.
  */
 export default async function startLoops (st) {
 

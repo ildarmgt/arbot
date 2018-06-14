@@ -4,13 +4,17 @@ import _ from 'lodash'; // useful math libarary
 import runLoadMarkets from './runLoadMarkets';
 import auth from '../auth.json'; // import my personal authentication data
 
+/**
+ * sets up exchanges and state for bots used here
+ */
 export default async function initializeExchanges (st) {
   for (let bot of st.bots) {
 
     // 1. reference exchange first
 
     if (!st.lib[bot.sourceRef]) {
-      console.log('Initializing', bot.sourceRef, 'b/c of bot id', bot.id);
+      // console.log('Initializing', bot.sourceRef, 'b/c of bot id', bot.id);
+
       // get reference exchange handle if not added yet
       st.lib[bot.sourceRef] = new ccxt[bot.sourceRef]();
       st.exchanges[bot.sourceRef] = { id: st.lib[bot.sourceRef].id };

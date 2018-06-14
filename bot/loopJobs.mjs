@@ -4,6 +4,9 @@ import runCancelOrders from './runCancelOrders';
 import runBuyOrder from './runBuyOrder';
 import runSellOrder from './runSellOrder';
 
+/**
+ * Continously goes through through job list and executes first one ready for it
+ */
 async function loopJobs (st) {
 
   // st.jobs.forEach((eaJob, jobIndex) => {

@@ -1,9 +1,12 @@
 import _ from 'lodash'; // useful math libarary
 
 import readyExchange from './readyExchange';
+
 import isBalanceReadyForOrder from './isBalanceReadyForOrder';
 
-// place buy order
+/**
+ * Place buy order based on selected job
+ */
 async function runBuyOrder (st, eaJob) {
   let pair = eaJob.coin1 + '/' + eaJob.coin2; // pair string
 

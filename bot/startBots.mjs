@@ -1,7 +1,7 @@
 import loopThisBot from './loopThisBot';
 
 /**
- * loopBots is a function that begins the
+ * A function that begins a separate async
  * loop of each bot's job generation
  */
 export default async function startBots (st) {

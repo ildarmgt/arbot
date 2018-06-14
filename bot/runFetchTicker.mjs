@@ -1,6 +1,8 @@
 import readyExchange from './readyExchange';
 
-// get price info & store it in state
+/**
+ * Get price info for a pair based on the job and store it in the state.
+ */
 async function runFetchTicker (st, eaJob) {
 
   try {

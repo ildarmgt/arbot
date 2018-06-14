@@ -1,7 +1,10 @@
 import _ from 'lodash';
 import diffToDays from './helper/diffToDays';
 
-// print balances in original, BTC, and USD
+/**
+ * Calculates and print balances in original, BTC, and USD units.
+ * Stores them to state for use by other functions.
+ */
 export default async function totalBalances (st) {
   // delay
   await new Promise(resolve => setTimeout(resolve, 30000));

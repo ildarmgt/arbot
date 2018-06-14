@@ -1,7 +1,9 @@
 'use strict';
 import _ from 'lodash'; // useful math libarary
 
-// takes difference in miliseconds and converts it to days hours minutes seconds format
+/**
+ * takes difference in miliseconds and converts it to days hours minutes seconds format
+ */
 function diffToDays (inMS) {
   let MSinSec = 1000;
   let MSinMin = MSinSec * 60;

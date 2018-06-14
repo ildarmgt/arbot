@@ -1,5 +1,7 @@
-// see if exchange recently had orders canceled
-// will wait job.maxWaitTime to see if it changes
+/**
+ * See if exchange recently had orders canceled.
+ * Will wait job.maxWaitTime to see if it changes
+ */
 export default async function isBalanceReadyForOrder (st, eaJob) {
   let waitingStartedTime = new Date().getTime();
 
