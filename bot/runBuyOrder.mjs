@@ -1,4 +1,3 @@
-'use strict';
 import _ from 'lodash'; // useful math libarary
 
 import readyExchange from './readyExchange';
@@ -38,7 +37,7 @@ async function runBuyOrder (st, eaJob) {
     console.error(st.exchanges[eaJob.exchange].id, ': failed buy order');
     if (!eaJob.retry) {
       eaJob.retry = true;
-      await new Promise(resolve => setTimeout(resolve, eaJob.sourceDelay));
+      await new Promise(resolve => setTimeout(resolve, eaJob.exchangeDelay));
       await runBuyOrder(st, eaJob); // retry
     }
   }

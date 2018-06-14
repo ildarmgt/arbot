@@ -1,9 +1,10 @@
-'use strict';
 import _ from 'lodash';
 import diffToDays from './helper/diffToDays';
 
 // print balances in original, BTC, and USD
-function totalBalances (st) {
+export default async function totalBalances (st) {
+  // delay
+  await new Promise(resolve => setTimeout(resolve, 15000));
 
   let holdings = {};
   let totalBTC = 0;
@@ -79,6 +80,5 @@ function totalBalances (st) {
   console.log('Run time:', st.data.firstTime ? diffToDays(new Date().getTime() - st.data.firstTime) : 'N/A');
   console.log('===============================================');
 
+  totalBalances(st);
 }
-
-export default totalBalances;

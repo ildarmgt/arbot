@@ -1,4 +1,3 @@
-'use strict';
 import readyExchange from './readyExchange';
 
 // cancel all active orders
@@ -20,7 +19,7 @@ async function runCancelOrders (st, eaJob) {
     console.error(st.exchanges[eaJob.exchange].id, ': failed cancel orders');
     if (!eaJob.retry) {
       eaJob.retry = true;
-      await new Promise(resolve => setTimeout(resolve, eaJob.sourceDelay));
+      await new Promise(resolve => setTimeout(resolve, eaJob.exchangeDelay));
       await runCancelOrders(st, eaJob);
     }
   }

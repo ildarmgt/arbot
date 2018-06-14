@@ -1,5 +1,3 @@
-'use strict';
-
 import readyExchange from './readyExchange';
 
 // get all account balances from an exchange of interest
@@ -15,7 +13,7 @@ async function runFetchBalance (st, eaJob) {
 
     console.log(
       st.exchanges[eaJob.exchange].id,
-      ': successful fetch_balance'
+      ': successful fetchBalance'
     );
 
   } catch (e) {

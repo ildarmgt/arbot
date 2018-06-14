@@ -1,4 +1,3 @@
-'use strict';
 import readyExchange from './readyExchange';
 
 // get price info & store it in state

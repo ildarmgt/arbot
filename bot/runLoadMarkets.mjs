@@ -1,4 +1,3 @@
-'use strict';
 // required initialization of an exchange
 async function runLoadMarkets (st, exchangeName) {
   try {
