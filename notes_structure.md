@@ -8,6 +8,20 @@ st
     * coin1
     * coin2
     * sourceRef
-  * lib
+  * lib // cctx or similar library object handles for api calls
+    * 'exchange name'
   * exchanges
+    * lastUsed // ms time stamp of last use
+    * inUse // is being used now
+    * 'exchange name'
+      * 'coin1/coin2'
+        * bid
+        * ask
+        * last
+      * balances
+        * 'coin'
+          * total
+          * free
+      * totalBTC
+      * totalUSD
   * data

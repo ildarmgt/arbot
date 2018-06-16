@@ -1,11 +1,13 @@
+'use strict';
 import _ from 'lodash';
 import diffToDays from './helper/diffToDays';
+import calcRefExchanges from './helper/calcRefExchanges';
 
 /**
  * Calculates and print balances in original, BTC, and USD units.
  * Stores them to state for use by other functions.
  */
-export default async function totalBalances (st) {
+export default async function calcBalances (st) {
   // delay
   await new Promise(resolve => setTimeout(resolve, 30000));
 
@@ -13,12 +15,9 @@ export default async function totalBalances (st) {
   let totalBTC = 0;
   let totalUSD = 0;
 
-  // temp solution, later to be gotten from reference exchanges in all the bots
-  let referenceExchanges = {
-    'XMR/BTC': 'hitbtc',
-    'BTC/USD': 'bitstamp',
-    'LTC/BTC': 'gdax'
-  };
+  let refPrices = await calcRefExchanges(st);
+
+  console.log('jobs in queue:', st.jobs.length);
 
   console.log('===============================================');
   console.log('                   BALANCES                    ');
@@ -37,9 +36,9 @@ export default async function totalBalances (st) {
   // convert all balances to BTC and USD if possible
   for (let coinKey in holdings) {
     // get conversion factor to BTC
-    let conversionFactorToBTC = (coinKey === 'BTC')
-      ? 1
-      : st.exchanges[referenceExchanges[coinKey + '/' + 'BTC']][coinKey + '/' + 'BTC'].last;
+    let conversionFactorToBTC = (coinKey === 'BTC') // ?
+      ? 1 // BTC to BTC is 1
+      : refPrices[coinKey + '/' + 'BTC'];
 
     // calculate BTC value of all coins
     if (conversionFactorToBTC) {
@@ -49,7 +48,7 @@ export default async function totalBalances (st) {
     }
 
     // get conversion factor BTC to USD
-    let conversionFactorToUSD = st.exchanges[referenceExchanges['BTC/USD']]['BTC/USD'].last;
+    let conversionFactorToUSD = refPrices['BTC/USD'];
     // calculate USD value of all coins
     if (conversionFactorToUSD) {
       let usdValue = _.floor(holdings[coinKey].valueInBTC * conversionFactorToUSD, 8);
@@ -59,9 +58,10 @@ export default async function totalBalances (st) {
 
     console.log(
       holdings[coinKey].value.toFixed(8), coinKey, '(',
-      holdings[coinKey].valueInBTC.toFixed(8), 'BTC,',
-      holdings[coinKey].valueInUSD.toFixed(2), 'USD )'
+      holdings[coinKey].valueInBTC ? holdings[coinKey].valueInBTC.toFixed(8) : 'n/a', 'BTC,',
+      holdings[coinKey].valueInUSD ? holdings[coinKey].valueInUSD.toFixed(2) : 'n/a', 'USD )'
     );
+
   }
 
   // record first balances
@@ -84,5 +84,5 @@ export default async function totalBalances (st) {
   console.log('Run time:', st.data.firstTime ? diffToDays(new Date().getTime() - st.data.firstTime) : 'N/A');
   console.log('===============================================');
 
-  totalBalances(st);
+  calcBalances(st);
 }

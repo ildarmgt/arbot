@@ -1,7 +1,7 @@
 import initializeExchanges from './initializeExchanges';
 import startBots from './startBots';
 import loopJobs from './loopJobs';
-import totalBalances from './totalBalances';
+import calcBalances from './calcBalances';
 
 /**
  * A function that initiates all the necessary async loops.
@@ -23,6 +23,6 @@ export default async function startLoops (st) {
 
   // starting info loop
   console.log('starting performance view loop');
-  totalBalances(st);
+  calcBalances(st);
   // (TODO) how to create jobs - big loop doing step by step job adds
 }

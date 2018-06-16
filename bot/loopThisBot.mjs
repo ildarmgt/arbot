@@ -3,7 +3,7 @@
  * Depending on type of bot it is, the job sequence will be different
  */
 export default async function loopThisBot (st, bot) {
-  console.log('Bot #', bot.id, 'type', bot.type, 'loop initiated');
+  // console.log('Bot #', bot.id, 'type', bot.type, 'loop initiated');
   // generate jobs
 
   if (bot.type === 'info') {
