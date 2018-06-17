@@ -1,5 +1,5 @@
 import startLoops from './bot/startLoops';
-import initialBots from './initialBots.mjs';
+import initialBots from './_initialBots';
 import State from './elements/State';
 
 // create this app state
@@ -11,4 +11,4 @@ initialBots(st);
 // initialize the operation
 startLoops(st);
 
-console.log('Reached the end of server.js file');
+console.log('Reached the end of server.mjs file');

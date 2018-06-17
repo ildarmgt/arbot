@@ -3,7 +3,7 @@
  * for each pair to do conversions.
  * Returns an object with key of pair and value of the last price
  */
-export default async function calcRefExchanges (st) {
+export default function calcRefExchanges (st) {
   // array of pairs & exchanges used for references
   // based on current bots and not old recorded data
   let sources = st.bots.map(bot => {
@@ -30,5 +30,9 @@ export default async function calcRefExchanges (st) {
   }, {}); // start with empty object
 
   console.log(ref);
+
+  // for ease of use, this should always be 1
+  ref['BTC/BTC'] = 1;
+
   return ref;
 }

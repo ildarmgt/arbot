@@ -5,7 +5,7 @@ export default class State {
     this.bots = []; // store each trading pair into separate bots
     this.botId = 0; // count bots
     this.lib = {}; // store initialized exchange libararies
-    this.exchanges = {}; // store data from exchanges
+    this.exchanges = {}; // store most recent data fetched from exchanges
     this.data = {}; // store performance data
   }
 }

@@ -1,4 +1,3 @@
-'use strict';
 import _ from 'lodash';
 import diffToDays from './helper/diffToDays';
 import calcRefExchanges from './helper/calcRefExchanges';
@@ -15,7 +14,7 @@ export default async function calcBalances (st) {
   let totalBTC = 0;
   let totalUSD = 0;
 
-  let refPrices = await calcRefExchanges(st);
+  let refPrices = calcRefExchanges(st);
 
   console.log('jobs in queue:', st.jobs.length);
 
