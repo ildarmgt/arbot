@@ -1,8 +1,8 @@
 import _ from 'lodash'; // useful math libarary
 
-import countPairs from './helper/countPairs';
-import countCoinUse from './helper/countCoinUse';
-import convUnits from './helper/convUnits';
+import countPairs from './countPairs';
+import countCoinUse from './countCoinUse';
+import convUnits from './convUnits';
 
 export default function calcPositions (st, job) {
   try {

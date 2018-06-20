@@ -10,6 +10,11 @@ import calcRefExchanges from './calcRefExchanges';
  * e.g. (st, 'XMR', 'BTC')
  */
 export default function convUnits (st, fromUnit, toUnit) {
+  // get obvious same unit case over with
+  if (fromUnit === toUnit) {
+    return 1;
+  }
+
   // grab known conversion factors
   let convFactors = calcRefExchanges(st);
 

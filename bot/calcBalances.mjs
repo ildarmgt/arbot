@@ -1,4 +1,4 @@
-import displayBalances from './displayBalances';
+import displayBalances from './helper/displayBalances';
 import calcBTCandUSD from './helper/calcBTCandUSD';
 
 /**

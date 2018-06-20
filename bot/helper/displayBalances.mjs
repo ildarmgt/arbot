@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import diffToDays from './helper/diffToDays';
+import diffToDays from './diffToDays';
 
 export default function displayBalances (st, totals) {
 

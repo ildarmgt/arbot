@@ -1,6 +1,6 @@
 import readyExchange from './readyExchange';
 import isBalanceReadyForOrder from './isBalanceReadyForOrder';
-import calcPositions from './calcPositions';
+import calcPositions from './helper/calcPositions';
 
 /**
  * Place buy order based on selected job
