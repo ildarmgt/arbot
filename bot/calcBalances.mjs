@@ -6,14 +6,6 @@ import calcBTCandUSD from './helper/calcBTCandUSD';
  * Stores them to state for use by other functions.
  */
 export default async function calcBalances (st) {
-  // need to know
-  // total balance for each coin
-  // total balance on an exchange
-  // total balance on an exchange for every single coin
-
-  // start with a delay
-  await new Promise(resolve => setTimeout(resolve, 30000));
-
   // calculate sums
   let totals = {};
   for (let exchangeName in st.exchanges) {
@@ -48,9 +40,9 @@ export default async function calcBalances (st) {
   st.data.totals = totals;
 
   console.log('jobs in queue:', st.jobs.length);
+  // console.log('totals:', st.data.totals);
 
   // display balances
   displayBalances(st, totals);
 
-  calcBalances(st);
 }

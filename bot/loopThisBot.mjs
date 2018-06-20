@@ -61,7 +61,7 @@ export default async function loopThisBot (st, bot) {
       coin1: bot.coin1,
       coin2: bot.coin2,
       priceSource: bot.sourceRef,
-      offsetPercent: -bot.offsetPercent,
+      offsetPercent: bot.offsetPercent,
       positionFraction: bot.positionFraction,
       exchangeDelay: bot.sourceTradeDelay,
       maxWaitTime: bot.botStepDelay / 2,

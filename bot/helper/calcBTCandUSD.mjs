@@ -35,6 +35,9 @@ export default function calcBTCandUSD (st, totals) {
 
     // if exchange, go through all coins in each one to total
     if (totals[key].isExchange) {
+      let exchangeTotalBTC = 0;
+      let exchangeTotalUSD = 0;
+
       for (let coin in totals[key]) {
         // grab conversion factors
         let altbtc = conversionFactors[coin + '/BTC'];
@@ -42,13 +45,20 @@ export default function calcBTCandUSD (st, totals) {
         // if btc conversion factor available
         if (altbtc) {
           totals[key][coin].totalBTC = totals[key][coin].total * altbtc;
+          exchangeTotalBTC += totals[key][coin].totalBTC;
 
           // if usd conversion factor available
           if (btcusd) {
             totals[key][coin].totalUSD = totals[key][coin].totalBTC * btcusd;
+            exchangeTotalUSD += totals[key][coin].totalUSD;
           }
         }
       }
+
+      // when done with exchange, add totals for exchange
+      totals[key].sumBTC = exchangeTotalBTC;
+      totals[key].sumUSD = exchangeTotalUSD;
+
     }
   }
 

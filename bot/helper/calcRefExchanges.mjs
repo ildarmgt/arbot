@@ -24,12 +24,12 @@ export default function calcRefExchanges (st) {
       : undefined;
 
     // if lastPrice was found, amend ref to include a new pair
-    return lastPrice // ?
-      ? { ...thisRef, [source.pair]: lastPrice }
-      : thisRef;
+    return (
+      lastPrice // ?
+        ? { ...thisRef, [source.pair]: lastPrice }
+        : thisRef
+    );
   }, {}); // start with empty object
-
-  console.log(ref);
 
   // for ease of use, this should always be 1
   ref['BTC/BTC'] = 1;

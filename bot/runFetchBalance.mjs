@@ -1,4 +1,5 @@
 import readyExchange from './readyExchange';
+import calcBalances from './calcBalances';
 
 /**
  * Get all account balances from an exchange in the job.
@@ -26,6 +27,8 @@ async function runFetchBalance (st, eaJob) {
       await runFetchBalance(st, eaJob);
     }
   }
+
+  await calcBalances(st);
 
   readyExchange(st, eaJob);
 }
