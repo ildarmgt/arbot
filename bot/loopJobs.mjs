@@ -3,6 +3,7 @@ import runFetchBalance from './runFetchBalance';
 import runCancelOrders from './runCancelOrders';
 import runBuyOrder from './runBuyOrder';
 import runSellOrder from './runSellOrder';
+import runFetchMyTrades from './runFetchMyTrades';
 
 /**
  * Continously goes through through job list and executes first one ready for it
@@ -32,7 +33,7 @@ async function loopJobs (st) {
       if (eaJob.name === 'cancelOrders') { runCancelOrders(st, eaJob); matchFound = true; }
       if (eaJob.name === 'createBuyOrder') { runBuyOrder(st, eaJob); matchFound = true; }
       if (eaJob.name === 'createSellOrder') { runSellOrder(st, eaJob); matchFound = true; }
-
+      if (eaJob.name === 'fetchMyTrades') { runFetchMyTrades(st, eaJob); matchFound = true; }
       // remove done job from job list
       st.jobs.splice(jobIndex, 1);
 

@@ -82,6 +82,20 @@ export default async function loopThisBot (st, bot) {
       maxWaitTime: bot.botStepDelay / 2,
       timestamp: new Date().getTime()
     });
+
+    if (bot.leadsSharedEvents) {
+      // (optional) fetch complete trades
+      st.jobs.push({
+        name: 'fetchMyTrades',
+        id: st.jobId++,
+        exchange: bot.sourceTrade,
+        coin1: bot.coin1,
+        coin2: bot.coin2,
+        exchangeDelay: bot.sourceTradeDelay,
+        maxWaitTime: bot.botStepDelay / 2,
+        timestamp: new Date().getTime()
+      });
+    }
   }
 
   // loose bot step delay

@@ -25,3 +25,6 @@ st
       * totalBTC
       * totalUSD
   * data
+    * firstBTC // est BTC at start of script
+    * firstUSD // est USD at start of script
+    * firstTime // timestamp script roughly began

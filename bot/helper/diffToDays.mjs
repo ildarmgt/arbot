@@ -14,7 +14,7 @@ function diffToDays (inMS) {
   let minutes = _.floor((inMS % MSinDay % MSinHour) / MSinMin);
   let seconds = _.floor((inMS % MSinDay % MSinHour % MSinMin) / MSinSec, 1);
 
-  return days + ' days ' + hours + ' hours ' + minutes + ' minutes ' + seconds.toFixed(1) + ' seconds';
+  return days + 'd ' + hours + 'h ' + minutes + 'm ' + seconds.toFixed(1) + 's';
 }
 
 export default diffToDays;
