@@ -1,29 +1,28 @@
-import diffToDays from './helper/diffToDays';
 import readyExchange from './readyExchange';
+import logMyTrades from './helper/logMyTrades';
 
 /**
  * Get my recent trades from an exchange
  */
 export default async function runFetchMyTrades (st, job) {
   try {
+    let lastTime = st.exchanges[job.exchange].fetchedMyTradesTime;
+    let response = await st.lib[job.exchange].fetchMyTrades(undefined, lastTime);
 
-    let response = await st.lib[job.exchange].fetchMyTrades(undefined, st.data.firstTime);
+    if (response.length) {
 
-    if (response) {
-      response.forEach((trade, n) => {
-        console.log(
-          job.exchange,
-          n,
-          diffToDays(new Date().getTime() - trade.timestamp),
-          trade.price,
-          trade.symbol,
-          'for', trade.amount, job.coin2
-        );
-      });
+      console.log(job.exchange, ':', response.length, 'recent matched trades');
+      console.log(response);
+
+      // log all new trades
+      logMyTrades(st, job, response);
+
+    } else {
+      console.log(job.exchange, ': no recent matched trades.');
     }
 
   } catch (e) {
-    console.log('fetch trades failed', e);
+    console.log('fetch trades failed');
   }
 
   readyExchange(st, job);

@@ -24,6 +24,7 @@ st
           * free
       * totalBTC
       * totalUSD
+      * fetchedMyTradesTime // last wrote log of trades to file
   * data
     * firstBTC // est BTC at start of script
     * firstUSD // est USD at start of script

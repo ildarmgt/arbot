@@ -45,6 +45,7 @@ export default async function initializeExchanges (st) {
       // set timer params
       st.exchanges[bot.sourceTrade].lastUsed = new Date().getTime();
       st.exchanges[bot.sourceTrade].inUse = false;
+      st.exchanges[bot.sourceTrade].fetchedMyTradesTime = new Date().getTime();
 
       // initialize new exchange by name
       await runLoadMarkets(st, bot.sourceTrade);

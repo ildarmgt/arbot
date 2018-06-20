@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import diffToDays from './diffToDays';
 
-export default function displayBalances (st, totals) {
+export default async function displayBalances (st, totals) {
 
   console.log('===============================================');
   console.log('                   BALANCES                    ');

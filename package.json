@@ -20,6 +20,8 @@
   },
   "dependencies": {
     "ccxt": "^1.14.138",
+    "csv-write-stream": "^2.0.0",
+    "fs": "0.0.1-security",
     "lodash": "^4.17.10"
   }
 }

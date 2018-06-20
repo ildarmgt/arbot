@@ -91,7 +91,7 @@ export default async function loopThisBot (st, bot) {
         exchange: bot.sourceTrade,
         coin1: bot.coin1,
         coin2: bot.coin2,
-        exchangeDelay: bot.sourceTradeDelay,
+        exchangeDelay: bot.sourceTradeDelay * 3,
         maxWaitTime: bot.botStepDelay / 2,
         timestamp: new Date().getTime()
       });
