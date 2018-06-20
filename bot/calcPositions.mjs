@@ -46,8 +46,8 @@ export default function calcPositions (st, job) {
     let maxPerPair_UnitBTC = exchangeTotal_UnitBTC / numberPairs;
     // subtract the dedicated balance of the other coin in the pair from total a pair should have to get max position size
     // if too much of the other coin, no order should be placed at all to prevent single coin gaining all available balance value
-    let buyLeftOver_Unit1 = _.max([maxPerPair_UnitBTC * convUnits(st, 'BTC', coin1) - maxPerCoin1_Unit1, 0]);
-    let sellLeftOver_Unit2 = _.max([maxPerPair_UnitBTC * convUnits(st, 'BTC', coin2) - maxPerCoin2_Unit2, 0]);
+    let buyLeftOver_Unit1 = _.max([maxPerPair_UnitBTC * convUnits(st, 'BTC', coin1) - maxPerCoin1_Unit1, maxPerCoin2_Unit2 * convUnits(st, coin2, coin1) - maxPerCoin1_Unit1, 0]);
+    let sellLeftOver_Unit2 = _.max([maxPerPair_UnitBTC * convUnits(st, 'BTC', coin2) - maxPerCoin2_Unit2, maxPerCoin1_Unit1 * convUnits(st, coin1, coin2) - maxPerCoin2_Unit2, 0]);
 
     // set order amount to total available or known limits
     let buyOrderAmount_Unit1 = _.min([
