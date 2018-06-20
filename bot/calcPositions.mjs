@@ -38,26 +38,28 @@ export default function calcPositions (st, job) {
 
     // establish some maximum order sizes so a single pair or coin doesn't accumulate too much of total balance
 
-    // each pair's dedicated balance for orders should at most be evenly split fraction of total balance
-    // for simplicity each order should then be limited to half of pairs maximum
-    // let maxPerPair_UnitBTC = exchangeTotal_UnitBTC / numberPairs;
-    // let maxPerOrder_UnitBTC = maxPerPair_UnitBTC / 2;
-
     // each coin order should at most be evenly split fraction of that coins available balance
     let maxPerCoin1_Unit1 = totalCoin1_Unit1 / numberCoin1;
     let maxPerCoin2_Unit2 = totalCoin2_Unit2 / numberCoin2;
 
+    // each pair's dedicated max balance for orders should at most be evenly split fraction of total balance
+    let maxPerPair_UnitBTC = exchangeTotal_UnitBTC / numberPairs;
+    // subtract the dedicated balance of the other coin in the pair from total a pair should have to get max position size
+    // if too much of the other coin, no order should be placed at all to prevent single coin gaining all available balance value
+    let buyLeftOver_Unit1 = _.max([maxPerPair_UnitBTC * convUnits(st, 'BTC', coin1) - maxPerCoin1_Unit1, 0]);
+    let sellLeftOver_Unit2 = _.max([maxPerPair_UnitBTC * convUnits(st, 'BTC', coin2) - maxPerCoin2_Unit2, 0]);
+
     // set order amount to total available or known limits
     let buyOrderAmount_Unit1 = _.min([
       totalCoin2_Unit2 * convUnits(st, coin2, coin1) / buyOffset,
-      maxPerCoin2_Unit2 * convUnits(st, coin2, coin1) / buyOffset
-      // maxPerOrder_UnitBTC * convUnits(st, 'BTC', coin1) / buyOffset
+      maxPerCoin2_Unit2 * convUnits(st, coin2, coin1) / buyOffset,
+      buyLeftOver_Unit1
     ]);
 
     let sellOrderAmount_Unit1 = _.min([
       totalCoin1_Unit1,
-      maxPerCoin1_Unit1
-      // maxPerOrder_UnitBTC * convUnits(st, 'BTC', coin1) / sellOffset
+      maxPerCoin1_Unit1,
+      sellLeftOver_Unit2 * convUnits(st, coin2, coin1) / sellOffset
     ]);
 
     // let user settings size down the defautl position with a fraction
@@ -66,10 +68,12 @@ export default function calcPositions (st, job) {
 
     // check if above minimum order size
     let enoughForBuy =
-      buyOrderAmount_Unit1 * convUnits(st, coin1, coin2) > minimumBaseTrade_Unit2;
+      buyOrderAmount_Unit1 * convUnits(st, coin1, coin2) > minimumBaseTrade_Unit2 ||
+      buyOrderAmount_Unit1 > 0;
 
     let enoughForSell =
-      sellOrderAmount_Unit1 * convUnits(st, coin1, coin2) > minimumBaseTrade_Unit2;
+      sellOrderAmount_Unit1 * convUnits(st, coin1, coin2) > minimumBaseTrade_Unit2 ||
+      sellOrderAmount_Unit1 > 0;
 
     // return the important data
     let calculatedPositions = {
