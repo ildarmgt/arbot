@@ -1,4 +1,5 @@
 import diffToDays from './helper/diffToDays';
+import readyExchange from './readyExchange';
 
 /**
  * Get my recent trades from an exchange
@@ -24,4 +25,6 @@ export default async function runFetchMyTrades (st, job) {
   } catch (e) {
     console.log('fetch trades failed', e);
   }
+
+  readyExchange(st, job);
 }
