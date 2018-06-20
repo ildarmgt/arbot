@@ -55,8 +55,8 @@ export default async function runBuyOrder (st, job) {
       } else {
         console.log(
           st.exchanges[job.exchange].id, ':',
-          job.coin2,
-          'balance too low for buy order'
+          pair, ':',
+          job.coin2, 'balance too low for buy order'
         );
       }
     }
