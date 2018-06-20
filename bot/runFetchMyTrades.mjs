@@ -12,7 +12,6 @@ export default async function runFetchMyTrades (st, job) {
     if (response.length) {
 
       console.log(job.exchange, ':', response.length, 'recent matched trades');
-      console.log(response);
 
       // log all new trades
       logMyTrades(st, job, response);

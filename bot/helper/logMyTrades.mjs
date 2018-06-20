@@ -53,6 +53,6 @@ export default async function logMyTrades (st, job, trades) {
     st.exchanges[job.exchange].fetchedMyTradesTime = new Date().getTime();
 
   } catch (e) {
-    console.error('Failed writing bot trades to file:', e);
+    console.error('Failed writing bot trades to file');
   }
 }
