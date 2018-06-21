@@ -68,11 +68,11 @@ export default function calcPositions (st, job) {
 
     // check if above minimum order size
     let enoughForBuy =
-      buyOrderAmount_Unit1 * convUnits(st, coin1, coin2) > minimumBaseTrade_Unit2 ||
+      buyOrderAmount_Unit1 * convUnits(st, coin1, coin2) > minimumBaseTrade_Unit2 &&
       buyOrderAmount_Unit1 > 0;
 
     let enoughForSell =
-      sellOrderAmount_Unit1 * convUnits(st, coin1, coin2) > minimumBaseTrade_Unit2 ||
+      sellOrderAmount_Unit1 * convUnits(st, coin1, coin2) > minimumBaseTrade_Unit2 &&
       sellOrderAmount_Unit1 > 0;
 
     // return the important data
@@ -90,8 +90,8 @@ export default function calcPositions (st, job) {
         sizeBTC: _.floor(sellOrderAmount_Unit1 * convUnits(st, coin1, 'BTC'), 8)
       }
     };
-    // console.log(exchange, pair, 'proposed positions:');
-    // console.log(calculatedPositions);
+    console.log(exchange, pair, 'proposed positions:');
+    console.log(calculatedPositions);
     return calculatedPositions;
 
   } catch (e) {

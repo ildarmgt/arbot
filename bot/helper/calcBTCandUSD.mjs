@@ -9,6 +9,7 @@ import calcRefExchanges from './calcRefExchanges';
 export default function calcBTCandUSD (st, totals) {
   let conversionFactors = calcRefExchanges(st);
   let btcusd = conversionFactors['BTC/USD'];
+  let altbtc;
 
   let sumBTC = 0;
   let sumUSD = 0;
@@ -18,7 +19,7 @@ export default function calcBTCandUSD (st, totals) {
     // if coin, add new conversions
     if (totals[key].isCoin) {
       // grab conversion factors
-      let altbtc = conversionFactors[key + '/BTC'];
+      altbtc = conversionFactors[key + '/BTC'];
 
       if (altbtc) {
         // if conversion factor available, calculate btc total value
@@ -68,12 +69,13 @@ export default function calcBTCandUSD (st, totals) {
 
   // record first balances in state ( to be replaced by database history )
   // if first data isn't recorded yet, record it
-  if (!(st.data.firstBTC && st.data.firstUSD)) {
+  if (!(st.data.firstBTC && st.data.firstUSD) && btcusd && altbtc) {
     // if even one of initial records don't exist, record this pass as initial
     st.data.firstBTC = _.floor(sumBTC, 8);
     st.data.firstUSD = _.floor(sumUSD, 2);
     st.data.firstTime = new Date().getTime();
   }
 
+  // (TODO) replace "&& btcusd && altbtc" with check if there were no unfound conversions
   return totals;
 }

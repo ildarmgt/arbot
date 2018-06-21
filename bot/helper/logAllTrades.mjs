@@ -4,9 +4,10 @@ import csvWriter from 'csv-write-stream';
 
 import calcRefExchanges from './calcRefExchanges';
 
-export default async function logMyTrades (st, job, trades) {
+export default async function logAllTrades (st, job, trades) {
 
-  const FILE_PATH = 'mytrades.csv';
+  const FILE_PATH = 'alltrades_' + job.coin1 + job.coin2 + '.csv';
+  let pair = job.coin1 + '/' + job.coin2;
 
   try {
     let writer = csvWriter();
@@ -48,13 +49,13 @@ export default async function logMyTrades (st, job, trades) {
     });
 
     writer.end();
-
     // write down the time of last entry so don't repeat trades
-    st.exchanges[job.exchange].fetchedMyTradesTime = new Date().getTime();
+    st.exchanges[job.exchange].fetchedAllTradesTime[pair] = new Date().getTime();
 
   } catch (e) {
-    console.error('Failed writing bot trades to file');
+    console.error('Failed writing others', pair, 'trades to file');
   }
 
-  console.log('all trade log updated for bot trades');
+  console.log('all trade log updated for', pair);
+
 }

@@ -43,7 +43,7 @@ export default async function runBuyOrder (st, job) {
 
         } catch (e) {
           console.error(st.exchanges[job.exchange].id, ': failed', pair, 'buy order');
-
+          console.error(e);
           // retry
           if (!job.retry) {
             job.retry = true;

@@ -84,7 +84,7 @@ export default async function loopThisBot (st, bot) {
     });
 
     if (bot.leadsSharedEvents) {
-      // (optional) fetch complete trades
+      // (optional) fetch bot complete trades from exchange
       st.jobs.push({
         name: 'fetchMyTrades',
         id: st.jobId++,
@@ -92,10 +92,20 @@ export default async function loopThisBot (st, bot) {
         coin1: bot.coin1,
         coin2: bot.coin2,
         exchangeDelay: bot.sourceTradeDelay * 3,
-        maxWaitTime: bot.botStepDelay / 2,
         timestamp: new Date().getTime()
       });
     }
+
+    // (optional) fetch all trades for this pair
+    st.jobs.push({
+      name: 'fetchPairTrades',
+      id: st.jobId++,
+      exchange: bot.sourceTrade,
+      coin1: bot.coin1,
+      coin2: bot.coin2,
+      exchangeDelay: bot.sourceTradeDelay * 3,
+      timestamp: new Date().getTime()
+    });
   }
 
   // loose bot step delay

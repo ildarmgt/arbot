@@ -6,7 +6,8 @@ import logMyTrades from './helper/logMyTrades';
  */
 export default async function runFetchMyTrades (st, job) {
   try {
-    let lastTime = st.exchanges[job.exchange].fetchedMyTradesTime;
+    let lastTime = st.exchanges[job.exchange].fetchedMyTradesTime || new Date().getTime();
+    st.exchanges[job.exchange].fetchedMyTradesTime = lastTime;
     let response = await st.lib[job.exchange].fetchMyTrades(undefined, lastTime);
 
     if (response.length) {
