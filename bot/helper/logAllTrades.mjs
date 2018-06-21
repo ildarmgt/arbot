@@ -44,7 +44,7 @@ export default async function logAllTrades (st, job, trades) {
         tradePrice: tradePrice,
         offset: offset,
         amount: trade.amount,
-        profit: _.floor(trade.amount * offset / 100.0, 8)
+        profit: Math.abs(_.floor(trade.amount * offset / 100.0, 8))
       });
     });
 
