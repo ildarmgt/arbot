@@ -1,5 +1,5 @@
 import readyExchange from './readyExchange';
-import logAllTrades from './helper/logAllTrades';
+import logTradesCSV from './helper/logTradesCSV';
 
 /**
  * Get all recent trades from an exchange for specific pair
@@ -16,7 +16,7 @@ export default async function runFetchPairTrades (st, job) {
       // console.log(job.exchange, ':', response.length, 'recent matched trades');
 
       // log all new trades
-      logAllTrades(st, job, response);
+      logTradesCSV(st, job, response, false);
 
     } else {
       console.log(job.exchange, ': no recent any', pair, 'trades.');

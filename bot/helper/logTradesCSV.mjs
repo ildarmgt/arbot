@@ -4,9 +4,15 @@ import csvWriter from 'csv-write-stream';
 
 import calcRefExchanges from './calcRefExchanges';
 
-export default async function logMyTrades (st, job, trades) {
+export default async function logTradesCSV (st, job, trades, mine) {
 
-  const FILE_PATH = 'mytrades.csv';
+  // if bot trade, say my_trades.csv otherwise ALTBTC_trades.csv
+  const FILE_PATH = (
+    'logs/' +
+    (mine ? 'my_' : job.coin1 + job.coin2 + '_') +
+    'trades' +
+    '.csv'
+  );
 
   try {
     let writer = csvWriter();
