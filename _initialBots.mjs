@@ -23,7 +23,7 @@ export default function initialBots (st) {
     sourceRefDelay: 500, // delay between API calls (ms) for reference price exchange
     sourceTrade: 'cryptopia', // trade here
     sourceTradeDelay: 300, // delay between API calls (ms) for trading exchange
-    offsetPercent: 0.5, // percent offset from reference price for bids and asks
+    offsetPercent: 0.4, // percent offset from reference price for bids and asks
     positionFraction: 0.8, // fraction of available coins to place order with
     leadsSharedEvents: true // if this bot fetches/cancels for all on same exchange
   });
@@ -38,7 +38,7 @@ export default function initialBots (st) {
     sourceRefDelay: 500, // delay between API calls (ms) for reference price exchange
     sourceTrade: 'cryptopia', // trade here
     sourceTradeDelay: 300, // delay between API calls (ms) for trading exchange
-    offsetPercent: 0.5, // percent offset from reference price for bids and asks
+    offsetPercent: 0.4, // percent offset from reference price for bids and asks
     positionFraction: 0.8, // fraction of available coins to place order with
     leadsSharedEvents: false // if this bot fetches/cancels for all on same exchange
   });

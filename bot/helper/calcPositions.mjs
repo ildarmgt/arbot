@@ -90,8 +90,8 @@ export default function calcPositions (st, job) {
         sizeBTC: _.floor(sellOrderAmount_Unit1 * convUnits(st, coin1, 'BTC'), 8)
       }
     };
-    console.log(exchange, pair, 'proposed positions:');
-    console.log(calculatedPositions);
+    // console.log(exchange, pair, 'proposed positions:');
+    // console.log(calculatedPositions);
     return calculatedPositions;
 
   } catch (e) {
