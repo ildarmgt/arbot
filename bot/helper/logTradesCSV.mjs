@@ -4,6 +4,9 @@ import csvWriter from 'csv-write-stream';
 
 import calcRefExchanges from './calcRefExchanges';
 
+/**
+ * write new trade data to csv files
+ */
 export default async function logTradesCSV (st, job, trades, mine) {
 
   // if bot trade, say my_trades.csv otherwise ALTBTC_trades.csv

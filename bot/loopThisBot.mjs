@@ -53,34 +53,36 @@ export default async function loopThisBot (st, bot) {
       });
     }
 
-    // 4) place buy order
-    st.jobs.push({
-      name: 'createBuyOrder',
-      id: st.jobId++,
-      exchange: bot.sourceTrade,
-      coin1: bot.coin1,
-      coin2: bot.coin2,
-      priceSource: bot.sourceRef,
-      offsetPercent: bot.offsetPercent,
-      positionFraction: bot.positionFraction,
-      exchangeDelay: bot.sourceTradeDelay,
-      maxWaitTime: bot.botStepDelay / 2,
-      timestamp: new Date().getTime()
-    });
+    bot.offsetPercent.forEach((offset, eaIndex) => {
+      // 4) place buy order
+      st.jobs.push({
+        name: 'createBuyOrder',
+        id: st.jobId++,
+        exchange: bot.sourceTrade,
+        coin1: bot.coin1,
+        coin2: bot.coin2,
+        priceSource: bot.sourceRef,
+        offsetPercent: offset,
+        positionFraction: bot.positionFraction[eaIndex],
+        exchangeDelay: bot.sourceTradeDelay,
+        maxWaitTime: bot.botStepDelay / 2,
+        timestamp: new Date().getTime()
+      });
 
-    // 5) place sell order
-    st.jobs.push({
-      name: 'createSellOrder',
-      id: st.jobId++,
-      exchange: bot.sourceTrade,
-      coin1: bot.coin1,
-      coin2: bot.coin2,
-      priceSource: bot.sourceRef,
-      offsetPercent: bot.offsetPercent,
-      positionFraction: bot.positionFraction,
-      exchangeDelay: bot.sourceTradeDelay,
-      maxWaitTime: bot.botStepDelay / 2,
-      timestamp: new Date().getTime()
+      // 5) place sell order
+      st.jobs.push({
+        name: 'createSellOrder',
+        id: st.jobId++,
+        exchange: bot.sourceTrade,
+        coin1: bot.coin1,
+        coin2: bot.coin2,
+        priceSource: bot.sourceRef,
+        offsetPercent: offset,
+        positionFraction: bot.positionFraction[eaIndex],
+        exchangeDelay: bot.sourceTradeDelay,
+        maxWaitTime: bot.botStepDelay / 2,
+        timestamp: new Date().getTime()
+      });
     });
 
     if (bot.leadsSharedEvents) {

@@ -21,8 +21,4 @@ export default async function startLoops (st) {
   console.log('starting job running loop');
   loopJobs(st);
 
-  // starting info loop
-  // console.log('starting performance view loop');
-  // calcBalances(st);
-  // (TODO) how to create jobs - big loop doing step by step job adds
 }

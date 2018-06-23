@@ -38,7 +38,7 @@ export default async function runSellOrder (st, job) {
             `(~${positions.sell.sizeBTC} BTC)`,
             'at',
             sellOrderPrice, pair,
-            `(${job.offsetPercent > 0 ? '+' : ''}${job.offsetPercent}%)`
+            `(+${job.offsetPercent}%)`
           );
 
         } catch (e) {
