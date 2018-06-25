@@ -18,7 +18,7 @@ export default async function runFetchPairTrades (st, job) {
 
     st.exchanges[job.exchange].fetchedAllTradesTime[pair] =
       st.exchanges[job.exchange].fetchedAllTradesTime[pair] ||
-        new Date().getTime() - st.data.lookBackTime / 4;
+        new Date().getTime();
 
     let lastTime = st.exchanges[job.exchange].fetchedAllTradesTime[pair];
 
