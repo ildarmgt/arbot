@@ -39,5 +39,26 @@ export default async function displayBalances (st, totals) {
 
   console.log('Run time:', st.data.firstTime ? diffToDays(new Date().getTime() - st.data.firstTime) : 'n/a');
 
+  console.log('-----------------------------------------------');
+
+  if (st.data.history) {
+    for (let pair in st.data.history) {
+      let calc = st.data.history[pair].rawCalc;
+
+      if (calc) {
+        console.log(
+          pair,
+          'stats:: n:', calc.size,
+          ', mean:', calc.mean,
+          ', median:', calc.median,
+          ', stdev:', calc.stdev,
+          ', 1xstdev:', `(${calc.stdev1top}, ${calc.stdev1bottom})`,
+          ', used?', (calc.stdev > 0.25)
+        );
+      }
+
+    }
+  }
+
   console.log('===============================================');
 }

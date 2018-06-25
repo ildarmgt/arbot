@@ -38,7 +38,8 @@ export default async function runBuyOrder (st, job) {
             `(~${positions.buy.sizeBTC} BTC)`,
             'at',
             buyOrderPrice, pair,
-            `(-${job.offsetPercent}%)`
+            `(${(positions.buyOffset * 100.0 - 100.0).toFixed(2)}%)`,
+            job.useSTDEV ? '[stdev algo]' : '[simple algo]'
           );
 
         } catch (e) {

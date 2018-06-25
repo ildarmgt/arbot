@@ -40,6 +40,10 @@ export default async function calcBalances (st) {
   st.data.totals = totals;
 
   console.log('jobs in queue:', st.jobs.length);
+  // st.jobs.forEach(job => {
+  //   console.log('#', job.id, JSON.stringify(job));
+  // });
+
   // console.log('totals:', st.data.totals);
 
   // display balances

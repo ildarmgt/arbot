@@ -38,11 +38,13 @@ export default async function runSellOrder (st, job) {
             `(~${positions.sell.sizeBTC} BTC)`,
             'at',
             sellOrderPrice, pair,
-            `(+${job.offsetPercent}%)`
+            `(${(positions.sellOffset * 100.0 - 100.0).toFixed(2)}%)`,
+            job.useSTDEV ? '[stdev algo]' : '[simple algo]'
           );
 
         } catch (e) {
           console.error(st.exchanges[job.exchange].id, ': failed', pair, 'sell order');
+          // console.log(e);
 
           // retry
           if (!job.retry) {

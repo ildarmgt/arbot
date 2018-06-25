@@ -15,6 +15,7 @@ export default async function loopThisBot (st, bot) {
       exchange: bot.sourceRef,
       coin1: bot.coin1,
       coin2: bot.coin2,
+      timeout: bot.botStepDelay,
       exchangeDelay: bot.sourceRefDelay
     });
   }
@@ -30,6 +31,7 @@ export default async function loopThisBot (st, bot) {
       coin1: bot.coin1,
       coin2: bot.coin2,
       exchangeDelay: bot.sourceRefDelay,
+      timeout: bot.botStepDelay,
       timestamp: new Date().getTime()
     });
 
@@ -40,6 +42,7 @@ export default async function loopThisBot (st, bot) {
         id: st.jobId++,
         exchange: bot.sourceTrade,
         exchangeDelay: bot.sourceTradeDelay,
+        timeout: bot.botStepDelay,
         timestamp: new Date().getTime()
       });
 
@@ -49,11 +52,18 @@ export default async function loopThisBot (st, bot) {
         id: st.jobId++,
         exchange: bot.sourceTrade,
         exchangeDelay: bot.sourceTradeDelay,
+        timeout: bot.botStepDelay,
         timestamp: new Date().getTime()
       });
     }
 
     bot.offsetPercent.forEach((offset, eaIndex) => {
+      let pair = bot.coin1 + '/' + bot.coin2;
+      let calc = st.data.history[pair] ? st.data.history[pair].rawCalc : undefined;
+
+      // only use stdev if its above minimum price offset
+      let useSTDEV = calc ? (calc.stdev > bot.minSTDEV) : false;
+
       // 4) place buy order
       st.jobs.push({
         name: 'createBuyOrder',
@@ -63,9 +73,14 @@ export default async function loopThisBot (st, bot) {
         coin2: bot.coin2,
         priceSource: bot.sourceRef,
         offsetPercent: offset,
+        useSTDEV: useSTDEV,
+        offsetSTDEV: bot.offsetSTDEV[eaIndex],
+        stdev: calc ? calc.stdev : undefined,
+        mean: calc ? calc.mean : undefined,
         positionFraction: bot.positionFraction[eaIndex],
         exchangeDelay: bot.sourceTradeDelay,
-        maxWaitTime: bot.botStepDelay / 2,
+        maxWaitTime: bot.botStepDelay / 1.2,
+        timeout: bot.botStepDelay,
         timestamp: new Date().getTime()
       });
 
@@ -78,9 +93,14 @@ export default async function loopThisBot (st, bot) {
         coin2: bot.coin2,
         priceSource: bot.sourceRef,
         offsetPercent: offset,
+        useSTDEV: useSTDEV,
+        offsetSTDEV: bot.offsetSTDEV[eaIndex],
+        stdev: calc ? calc.stdev : undefined,
+        mean: calc ? calc.mean : undefined,
         positionFraction: bot.positionFraction[eaIndex],
         exchangeDelay: bot.sourceTradeDelay,
-        maxWaitTime: bot.botStepDelay / 2,
+        maxWaitTime: bot.botStepDelay / 1.2,
+        timeout: bot.botStepDelay,
         timestamp: new Date().getTime()
       });
     });
@@ -94,6 +114,7 @@ export default async function loopThisBot (st, bot) {
         coin1: bot.coin1,
         coin2: bot.coin2,
         exchangeDelay: bot.sourceTradeDelay * 3,
+        timeout: bot.botStepDelay,
         timestamp: new Date().getTime()
       });
     }
@@ -106,6 +127,7 @@ export default async function loopThisBot (st, bot) {
       coin1: bot.coin1,
       coin2: bot.coin2,
       exchangeDelay: bot.sourceTradeDelay * 3,
+      timeout: bot.botStepDelay,
       timestamp: new Date().getTime()
     });
   }

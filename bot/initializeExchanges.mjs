@@ -38,7 +38,8 @@ export default async function initializeExchanges (st) {
         apiKey: auth[bot.sourceTrade].PUBLIC_KEY,
         secret: auth[bot.sourceTrade].PRIVATE_KEY,
         enableRateLimit: false,
-        rateLimit: _.round(bot.sourceTradeDelayLimit)
+        rateLimit: _.round(bot.sourceTradeDelayLimit / 4.0),
+        verbose: false
       });
       st.exchanges[bot.sourceTrade] = { id: st.lib[bot.sourceTrade].id };
 

@@ -6,21 +6,31 @@ import convUnits from './convUnits';
 
 export default function calcPositions (st, job) {
   try {
-    let {coin1, coin2, exchange, offsetPercent, priceSource, positionFraction} = job;
+    let {coin1, coin2, exchange, offsetPercent, priceSource, positionFraction, useSTDEV, offsetSTDEV, stdev, mean} = job;
     let pair = coin1 + '/' + coin2;
-    let sellOffset = (100 + offsetPercent) / 100.0;
-    let buyOffset = (100 - offsetPercent) / 100.0;
+    let buyOffset, sellOffset;
+    let buyOrderPrice, sellOrderPrice;
 
     // min trade size (coin 2 units)
-    let minimumBaseTrade_Unit2 = st.lib[exchange].markets[pair].info.MinimumBaseTrade || 0.005;
+    let minimumBaseTrade_Unit2 = (st.lib[exchange].markets[pair].info.MinimumBaseTrade || 0.005) * 2;
 
     // get the price we're using for reference
     let priceData = st.exchanges[priceSource][pair];
     let priceRef = _.floor(0.5 * (priceData.bid + priceData.ask), 8);
 
     // calculate the trading price that's offset for our immidiate potential profit
-    let buyOrderPrice = _.floor(priceRef * buyOffset, 8); // buy here
-    let sellOrderPrice = _.floor(priceRef * sellOffset, 8); // buy here
+
+    if (useSTDEV) {
+      sellOffset = (100 + (mean + offsetSTDEV * stdev)) / 100.0;
+      buyOffset = (100 + (mean - offsetSTDEV * stdev)) / 100.0;
+      buyOrderPrice = _.floor(priceRef * buyOffset, 8); // buy here
+      sellOrderPrice = _.floor(priceRef * sellOffset, 8); // sell here
+    } else {
+      sellOffset = (100 + offsetPercent) / 100.0;
+      buyOffset = (100 - offsetPercent) / 100.0;
+      buyOrderPrice = _.floor(priceRef * buyOffset, 8); // buy here
+      sellOrderPrice = _.floor(priceRef * sellOffset, 8); // sell here
+    }
 
     // grab total balance equivalent in estimated BTC
     let exchangeTotal_UnitBTC = st.data.totals[exchange].sumBTC;
@@ -77,6 +87,8 @@ export default function calcPositions (st, job) {
 
     // return the important data
     let calculatedPositions = {
+      buyOffset: buyOffset,
+      sellOffset: sellOffset,
       enoughForBuy: enoughForBuy,
       enoughForSell: enoughForSell,
       buy: {
@@ -90,8 +102,10 @@ export default function calcPositions (st, job) {
         sizeBTC: _.floor(sellOrderAmount_Unit1 * convUnits(st, coin1, 'BTC'), 8)
       }
     };
+
     // console.log(exchange, pair, 'proposed positions:');
-    // console.log(calculatedPositions);
+    // console.log(JSON.stringify(calculatedPositions));
+
     return calculatedPositions;
 
   } catch (e) {
