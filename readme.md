@@ -2,6 +2,8 @@
 
   Reads price on a big exchange and places orders on a smaller exchange with larger spread taking advantage of slippage.
 
+  Built so everyone runs their own bot. There's no reason to introduce more trusted parties like other people's servers.
+
 # Status
 
   Testing. No GUI or front end yet.
@@ -14,14 +16,16 @@
   * Text editor to create and edit the settings.json and auth.json in project root folder (e.g. vscode, gedit `apt install gedit`)
   * Uncertain: I had to enable ntpd for more accurate clock on Linux Ubuntu 18.04 or it would have issues rapidly placing orders ([instructions](https://www.digitalocean.com/community/tutorials/how-to-set-up-time-synchronization-on-ubuntu-16-04))
 
-  ## To create a folder with the bot
+  ## To clone this codebase, type this where you want the codebase folder to appear:
 
     git clone https://github.com/ildarmgt/arbot.git arbot
 
-  ## Set up
+  ## Install dependencies
 
     cd arbot
     npm install
+
+  ## Create auth.json & settings.json
 
   Need api keys for exchanges used for trading placed in a file in project root folder called `auth.json`
 
