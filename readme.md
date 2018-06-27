@@ -4,14 +4,15 @@
 
 # Status
 
-  Testing. Hard coded for cryptopia for now.
+  Testing. No GUI or front end yet.
 
 # Instructions
 
   ## Requires
 
   * Node.js v10
-  * I had to enable ntpd for more accurate clock on ubuntu 18.04 or it would have issues rapidly placing orders ([instructions](https://www.digitalocean.com/community/tutorials/how-to-set-up-time-synchronization-on-ubuntu-16-04))
+  * Text editor to create and edit the settings.json and auth.json in project root folder (e.g. vscode, gedit `apt install gedit`)
+  * Uncertain: I had to enable ntpd for more accurate clock on Linux Ubuntu 18.04 or it would have issues rapidly placing orders ([instructions](https://www.digitalocean.com/community/tutorials/how-to-set-up-time-synchronization-on-ubuntu-16-04))
 
   ## To create a folder with the bot
 
@@ -24,7 +25,7 @@
 
   Need api keys for exchanges used for trading placed in a file in project root folder called `auth.json`
 
-  Create it however (e.g. `touch auth.json`) and paste keys inside like this example for cryptopia:
+  Create it however (e.g. `touch auth.json`) and paste keys inside (e.g. `gedit auth.json`) like this example for cryptopia:
 
     {
       "cryptopia": {
@@ -34,7 +35,8 @@
     }
 
   Also need initial settings file (like what bots to run initially).
-  In project root folder, create `settings.json` (e.g. `touch settings.json`) and fill with something like this example:
+  In project root folder, create `settings.json` (e.g. `touch settings.json`).
+  Fill (e.g. `gedit settings.json`) with something like this example for 2 trading bots plus BTCUSD price fetching:
 
     {
       "bots": [
@@ -79,7 +81,7 @@
       ]
     }
 
-
+  Explanation of the bot parameters can be found as comments in `./elements/Bot.mjs' for now
 
   ## To run
 
