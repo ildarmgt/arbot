@@ -6,7 +6,7 @@
 
 # Status
 
-  Testing. No GUI or front end yet.
+  Testing. No GUI or front end yet, edit settings.json to control instead.
 
 # Instructions
 
