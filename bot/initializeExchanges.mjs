@@ -2,6 +2,7 @@ import ccxt from 'ccxt'; // add the exchange libraries
 import _ from 'lodash'; // useful math libarary
 
 import runLoadMarkets from './runLoadMarkets';
+
 import auth from '../auth.json'; // import my personal authentication data
 
 /**

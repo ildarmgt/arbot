@@ -1,4 +1,7 @@
 auth.json
+settings.json
+logs/*.csv
+
 node_modules
 package-lock.json
-logs/*.csv
+

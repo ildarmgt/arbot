@@ -8,7 +8,7 @@ export default class State {
     this.exchanges = {}; // store most recent data fetched from exchanges
 
     this.data = {}; // store performance data
-    this.data.lookBackTime = 4 * 60 * 60 * 1000; // miliseconds of look back time
+    this.data.lookBackTime = 4 * 60 * 60 * 1000; // miliseconds of look back time (TODO: make it adjustable for each exchange or bot)
     this.data.history = {}; // store old data
   }
 }
