@@ -43,8 +43,8 @@ export default function calcPositions (st, job) {
     let numberCoin2 = countCoinUse(st, coin2);
 
     // grab balance of both coins in the pair
-    let totalCoin1_Unit1 = st.exchanges[exchange].balances[coin1].total;
-    let totalCoin2_Unit2 = st.exchanges[exchange].balances[coin2].total;
+    let totalCoin1_Unit1 = st.exchanges[exchange].balances[coin1].free;
+    let totalCoin2_Unit2 = st.exchanges[exchange].balances[coin2].free;
 
     // establish some maximum order sizes so a single pair or coin doesn't accumulate too much of total balance
 
