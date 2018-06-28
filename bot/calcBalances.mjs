@@ -10,7 +10,7 @@ export default async function calcBalances (st) {
   let totals = {};
   for (let exchangeName in st.exchanges) {
     for (let coinName in st.exchanges[exchangeName].balances) {
-      let balance = st.exchanges[exchangeName].balances[coinName].free;
+      let balance = st.exchanges[exchangeName].balances[coinName].total;
       if (balance > 0) {
 
         // sum up overall for each coin
