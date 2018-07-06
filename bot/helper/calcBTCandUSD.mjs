@@ -67,15 +67,6 @@ export default function calcBTCandUSD (st, totals) {
   totals.sumBTC = sumBTC;
   totals.sumUSD = sumUSD;
 
-  // record first balances in state ( to be replaced by database history )
-  // if first data isn't recorded yet, record it
-  if (!(st.data.firstBTC && st.data.firstUSD) && btcusd && altbtc) {
-    // if even one of initial records don't exist, record this pass as initial
-    st.data.firstBTC = _.floor(sumBTC, 8);
-    st.data.firstUSD = _.floor(sumUSD, 2);
-    st.data.firstTime = new Date().getTime();
-  }
-
-  // (TODO) replace "&& btcusd && altbtc" with check if there were no unfound conversions
+  // (TODO) check if sum's are ready
   return totals;
 }

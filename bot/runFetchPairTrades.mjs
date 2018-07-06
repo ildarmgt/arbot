@@ -1,5 +1,5 @@
 import readyExchange from './readyExchange';
-import logTradesCSV from './helper/logTradesCSV';
+// import logTradesCSV from './helper/logTradesCSV';
 import analyzeData from './helper/analyzeData';
 
 /**
@@ -34,7 +34,7 @@ export default async function runFetchPairTrades (st, job) {
       // console.log(job.exchange, ':', response.length, 'recent matched trades');
 
       // log all new trades
-      logTradesCSV(st, job, response, false);
+      // logTradesCSV(st, job, response, false);
 
       // store and analyze new data
       analyzeData(st, job, response);

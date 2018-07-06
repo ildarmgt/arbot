@@ -10,5 +10,9 @@ export default class State {
     this.data = {}; // store performance data
     this.data.lookBackTime = 4 * 60 * 60 * 1000; // miliseconds of look back time (TODO: make it adjustable for each exchange or bot)
     this.data.history = {}; // store old data
+    this.data.totals = { // store old data
+      readyTotalBTC: false, // is total BTC balance ready
+      readyTotalUSD: false // is total USD balance ready
+    };
   }
 }

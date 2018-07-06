@@ -1,5 +1,5 @@
-st
-  * bots[]
+st // state variable
+  * bots[] // array of bots
     * type
       * 'arbot' // liquidity bot
       * 'info' // just gets price (e.g. btcusd)
@@ -31,3 +31,8 @@ st
     * firstBTC // est BTC at start of script
     * firstUSD // est USD at start of script
     * firstTime // timestamp script roughly began
+    * totals
+      * sumBTC // total BTC balance
+      * sumUSD // total USD balance
+      * readyTotalUSD // is total USD balance ready
+      * readyTotalBTC // is total BTC balance ready

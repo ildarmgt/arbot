@@ -19,6 +19,8 @@ export default async function logTradesCSV (st, job, trades, mine) {
 
   try {
     let writer = csvWriter();
+
+    // write headers to file if it doesn't exist, otherwise don't;
     if (!fs.existsSync(FILE_PATH)) {
       writer = csvWriter({ headers: [
         'datetime',
@@ -36,6 +38,7 @@ export default async function logTradesCSV (st, job, trades, mine) {
       writer = csvWriter({sendHeaders: false});
     }
 
+    // add lines to file
     writer.pipe(fs.createWriteStream(FILE_PATH, {flags: 'a'}));
 
     trades.forEach(trade => {
@@ -61,9 +64,10 @@ export default async function logTradesCSV (st, job, trades, mine) {
     // write down the time of last entry so don't repeat trades
     st.exchanges[job.exchange].fetchedMyTradesTime = new Date().getTime();
 
+    console.log('Trade log updated for bot trades');
+
   } catch (e) {
     console.error('Failed writing bot trades to file');
   }
 
-  console.log('all trade log updated for bot trades');
 }
