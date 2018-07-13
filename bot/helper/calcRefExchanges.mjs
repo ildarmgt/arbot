@@ -13,7 +13,7 @@ export default function calcRefExchanges (st) {
     };
   });
 
-  let ref = sources.reduce((thisRef, source) => {
+  let refs = sources.reduce((refsSoFar, source) => {
     // if exchange or pair is not recorded yet, lastPrice will be undefined
     let lastPrice = st.exchanges[source.exchangeName]
       ? (
@@ -26,13 +26,13 @@ export default function calcRefExchanges (st) {
     // if lastPrice was found, amend ref to include a new pair
     return (
       lastPrice // ?
-        ? { ...thisRef, [source.pair]: lastPrice }
-        : thisRef
+        ? { ...refsSoFar, [source.pair]: lastPrice }
+        : refsSoFar
     );
   }, {}); // start with empty object
 
   // for ease of use, this should always be 1
-  ref['BTC/BTC'] = 1;
+  refs['BTC/BTC'] = 1;
 
-  return ref;
+  return refs;
 }
