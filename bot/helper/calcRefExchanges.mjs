@@ -31,8 +31,10 @@ export default function calcRefExchanges (st) {
     );
   }, {}); // start with empty object
 
-  // for ease of use, this should always be 1
+  // some important conversions from traded coins to reference BTC and USD metrics
   refs['BTC/BTC'] = 1;
+  refs['USD/USD'] = 1; // probably not necessary
+  refs['USDT/USD'] = 1; // possible to find conversion but not worth it
 
   return refs;
 }
