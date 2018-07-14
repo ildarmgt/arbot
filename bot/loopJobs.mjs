@@ -64,7 +64,7 @@ async function loopJobs (st) {
   }
 
   // loop job execution function with a small delay
-  await new Promise(resolve => setTimeout(resolve, 100));
+  await new Promise(resolve => setTimeout(resolve, 10));
   loopJobs(st);
 }
 

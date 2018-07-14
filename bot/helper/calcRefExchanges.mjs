@@ -1,7 +1,7 @@
 /**
  * Goes through current bots and grabs price reference exchanges
  * for each pair to do conversions.
- * Returns an object with key of pair and value of the last price
+ * Returns an object with keys of pairs and values of the last prices
  */
 export default function calcRefExchanges (st) {
   // array of pairs & exchanges used for references
