@@ -1,4 +1,4 @@
-// import _ from 'lodash';
+// import _ from 'lodash';o
 import fs from 'fs';
 import csvWriter from 'csv-write-stream';
 
@@ -29,7 +29,7 @@ export default async function logPerformance (st) {
     writer.pipe(fs.createWriteStream(FILE_PATH, {flags: 'a'}));
 
     writer.write({
-      datetime: new Date().getTime(), // (TODO) convert to readable date
+      datetime: new Date(), // (TODO) convert to readable date
       timestamp: new Date().getTime(),
       valueBTC: st.data.totals.sumBTC.toFixed(8),
       valueUSD: st.data.totals.sumUSD.toFixed(2)

@@ -14,5 +14,6 @@ export default class State {
       readyTotalBTC: false, // is total BTC balance ready
       readyTotalUSD: false // is total USD balance ready
     };
+    this.data.firstTime = new Date().getTime();
   }
 }
