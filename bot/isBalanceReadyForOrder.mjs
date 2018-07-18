@@ -29,6 +29,6 @@ export default async function isBalanceReadyForOrder (st, eaJob) {
       return false;
     }
 
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 10));
   }
 }

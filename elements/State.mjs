@@ -15,5 +15,6 @@ export default class State {
       readyTotalUSD: false // is total USD balance ready
     };
     this.data.firstTime = new Date().getTime();
+    this.timerPerformanceLog = 1000 * 60 * 60;
   }
 }

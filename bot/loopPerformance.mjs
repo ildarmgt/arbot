@@ -6,7 +6,7 @@ import logPerformance from './helper/logPerformance';
 export default async function loopPerformance (st) {
 
   // delay for some time (e.g. hour)
-  await new Promise(resolve => setTimeout(resolve, 1000 * 60 * 60));
+  await new Promise(resolve => setTimeout(resolve, st.timerPerformanceLog));
 
   // log the performance
   logPerformance(st);
