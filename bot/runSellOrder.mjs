@@ -25,11 +25,18 @@ export default async function runSellOrder (st, job) {
         let sellOrderPrice = positions.sell.price;
 
         try {
-          await st.lib[job.exchange].createLimitSellOrder(
+          let res = await st.lib[job.exchange].createLimitSellOrder(
             pair,
             sellOrderAmountUnit1,
             sellOrderPrice
           );
+
+          // if response pair doesn't match goal pair, abort
+          if (res.symbol !== pair) {
+            console.error('ERROR: invalid pair detected traded');
+            console.error('job where error detected:\n', job);
+            process.exit(1); // exit code is number inside ()
+          }
 
           console.log(
             st.exchanges[job.exchange].id,
