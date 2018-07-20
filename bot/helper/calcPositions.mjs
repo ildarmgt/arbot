@@ -12,7 +12,7 @@ export default function calcPositions (st, job) {
     let buyOrderPrice, sellOrderPrice;
 
     // min trade size (coin 2 units)
-    let minimumBaseTrade_Unit2 = (st.lib[exchange].markets[pair].info.MinimumBaseTrade || 0.005) * 2;
+    let minimumBaseTrade_Unit2 = (st.lib[exchange].markets[pair].info.MinimumBaseTrade || 0.005) * 1.1; // little overestimate just in case
 
     // get the price we're using for reference
     let priceData = st.exchanges[priceSource][pair];
