@@ -79,7 +79,7 @@ export default async function loopThisBot (st, bot) {
         mean: calc ? calc.mean : undefined,
         positionFraction: bot.positionFraction[eaIndex],
         exchangeDelay: bot.sourceTradeDelay,
-        maxWaitTime: bot.botStepDelay / 1.2,
+        maxWaitTime: bot.botStepDelay / 1.1,
         timeout: bot.botStepDelay,
         timestamp: new Date().getTime()
       });
@@ -99,7 +99,7 @@ export default async function loopThisBot (st, bot) {
         mean: calc ? calc.mean : undefined,
         positionFraction: bot.positionFraction[eaIndex],
         exchangeDelay: bot.sourceTradeDelay,
-        maxWaitTime: bot.botStepDelay / 1.2,
+        maxWaitTime: bot.botStepDelay / 1.1,
         timeout: bot.botStepDelay,
         timestamp: new Date().getTime()
       });
