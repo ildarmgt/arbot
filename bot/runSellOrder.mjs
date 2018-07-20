@@ -35,6 +35,7 @@ export default async function runSellOrder (st, job) {
           if (res.symbol !== pair) {
             console.error('ERROR: invalid pair detected traded');
             console.error('job where error detected:\n', job);
+            console.error('response where error detected:\n', res);
             process.exit(1); // exit code is number inside ()
           }
 
