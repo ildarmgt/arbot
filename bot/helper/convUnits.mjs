@@ -23,10 +23,12 @@ export default function convUnits (st, fromUnit, toUnit) {
     for (let pair in convFactors) {
       let [coin1, coin2] = pair.split('/');
 
+      // check one order
       if (coin1 === fromUnit && coin2 === toUnit) {
         return convFactors[pair];
       }
 
+      // check opposite order
       if (coin1 === toUnit && coin2 === fromUnit) {
         return 1.0 / convFactors[pair];
       }

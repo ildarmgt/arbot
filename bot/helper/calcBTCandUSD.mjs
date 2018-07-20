@@ -1,34 +1,38 @@
-// import _ from 'lodash';
-
-import calcRefPrices from './calcRefPrices';
+import convUnits from './convUnits';
 
 /**
  * Returns a modified totals object with
  * valueUSD and valueBTC added for each entry
  */
 export default function calcBTCandUSD (st, totals) {
-  let conversionFactors = calcRefPrices(st);
-  let btcusd = conversionFactors['BTC/USD'];
-  let altbtc;
+  // let conversionFactors = calcRefPrices(st);
+  // let btcusd = conversionFactors['BTC/USD'];
+  // let altbtc;
+
+  let convFactorBTCUSD = convUnits(st, 'BTC', 'USD');
 
   let sumBTC = 0;
   let sumUSD = 0;
+
+  // totals has general coins as keys and exchanges with coins as keys within them
+  // depending on overall coin sum or exchange specific coin value
 
   for (let key in totals) {
 
     // if coin, add new conversions
     if (totals[key].isCoin) {
       // grab conversion factors
-      altbtc = conversionFactors[key + '/BTC'];
+      // altbtc = conversionFactors[key + '/BTC'];
+      let convFactorToBTC = convUnits(st, key, 'BTC');
 
-      if (altbtc) {
-        // if conversion factor available, calculate btc total value
-        totals[key].totalBTC = totals[key].total * altbtc;
+      if (convFactorToBTC) {
+        // if conversion factor available, calculate btc total value for that coin
+        totals[key].totalBTC = totals[key].total * convFactorToBTC;
         sumBTC += totals[key].totalBTC;
 
-        if (btcusd) {
+        if (convFactorBTCUSD) {
           // if conversion factor available calculate usd total value
-          totals[key].totalUSD = totals[key].totalBTC * btcusd;
+          totals[key].totalUSD = totals[key].totalBTC * convFactorBTCUSD;
           sumUSD += totals[key].totalUSD;
         }
       }
@@ -41,16 +45,16 @@ export default function calcBTCandUSD (st, totals) {
 
       for (let coin in totals[key]) {
         // grab conversion factors
-        let altbtc = conversionFactors[coin + '/BTC'];
+        let convFactorToBTC = convUnits(st, coin, 'BTC');
 
         // if btc conversion factor available
-        if (altbtc) {
-          totals[key][coin].totalBTC = totals[key][coin].total * altbtc;
+        if (convFactorToBTC) {
+          totals[key][coin].totalBTC = totals[key][coin].total * convFactorToBTC;
           exchangeTotalBTC += totals[key][coin].totalBTC;
 
           // if usd conversion factor available
-          if (btcusd) {
-            totals[key][coin].totalUSD = totals[key][coin].totalBTC * btcusd;
+          if (convFactorBTCUSD) {
+            totals[key][coin].totalUSD = totals[key][coin].totalBTC * convFactorBTCUSD;
             exchangeTotalUSD += totals[key][coin].totalUSD;
           }
         }

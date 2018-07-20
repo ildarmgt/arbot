@@ -1,4 +1,4 @@
-import _ from '../../../../../../.cache/typescript/2.9/node_modules/@types/lodash'; // useful math libarary
+import _ from 'lodash'; // useful math libarary
 
 import countPairs from './countPairs';
 import countCoinUse from './countCoinUse';

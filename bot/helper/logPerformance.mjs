@@ -1,4 +1,3 @@
-// import _ from 'lodash';o
 import fs from 'fs';
 import csvWriter from 'csv-write-stream';
 
