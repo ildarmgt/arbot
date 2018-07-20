@@ -5,9 +5,6 @@ import convUnits from './convUnits';
  * valueUSD and valueBTC added for each entry
  */
 export default function calcBTCandUSD (st, totals) {
-  // let conversionFactors = calcRefPrices(st);
-  // let btcusd = conversionFactors['BTC/USD'];
-  // let altbtc;
 
   let convFactorBTCUSD = convUnits(st, 'BTC', 'USD');
 
@@ -22,7 +19,6 @@ export default function calcBTCandUSD (st, totals) {
     // if coin, add new conversions
     if (totals[key].isCoin) {
       // grab conversion factors
-      // altbtc = conversionFactors[key + '/BTC'];
       let convFactorToBTC = convUnits(st, key, 'BTC');
 
       if (convFactorToBTC) {
