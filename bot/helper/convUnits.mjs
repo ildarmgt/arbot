@@ -1,4 +1,4 @@
-import calcRefExchanges from './calcRefExchanges';
+import calcRefPrices from './calcRefPrices';
 
 /**
  * returns conversion parameter from unit1 to unit2 if multiplied by it
@@ -15,8 +15,8 @@ export default function convUnits (st, fromUnit, toUnit) {
     return 1;
   }
 
-  // grab known conversion factors
-  let convFactors = calcRefExchanges(st);
+  // grab all known conversion factors
+  let convFactors = calcRefPrices(st);
 
   if (convFactors) {
     // look for exact match and convert

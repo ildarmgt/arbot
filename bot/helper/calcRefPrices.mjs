@@ -1,9 +1,9 @@
 /**
  * Goes through current bots and grabs price reference exchanges
  * for each pair to do conversions.
- * Returns an object with keys of pairs and values of the last prices
+ * Returns an object with ALL POSSIBLE keys of pairs and values of the last prices
  */
-export default function calcRefExchanges (st) {
+export default function calcRefPrices (st) {
   // array of pairs & exchanges used for references
   // based on current bots and not old recorded data
   let sources = st.bots.map(bot => {
@@ -34,7 +34,7 @@ export default function calcRefExchanges (st) {
   // some important conversions from traded coins to reference BTC and USD metrics
   refs['BTC/BTC'] = 1;
   refs['USD/USD'] = 1; // probably not necessary
-  refs['USDT/USD'] = 1; // possible to find conversion but not worth it
+  // refs['USDT/USD'] = 1; // possible to find conversion but not worth it
 
   return refs;
 }

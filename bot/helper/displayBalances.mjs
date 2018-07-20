@@ -6,6 +6,7 @@ import diffToDays from './diffToDays';
  */
 export default async function displayBalances (st, totals) {
 
+  console.log('jobs in queue:', st.jobs.length);
   console.log('===============================================');
   console.log('                   BALANCES                    ');
   console.log('-----------------------------------------------');

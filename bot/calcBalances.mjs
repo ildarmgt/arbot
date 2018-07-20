@@ -36,10 +36,9 @@ export default async function calcBalances (st) {
   }
 
   // calculate BTC and USD evaluations for each
-  totals = calcBTCandUSD(st, totals);
-  st.data.totals = totals;
+  let newTotals = calcBTCandUSD(st, totals);
+  st.data.totals = newTotals;
 
-  console.log('jobs in queue:', st.jobs.length);
   // st.jobs.forEach(job => {
   //   console.log('#', job.id, JSON.stringify(job));
   // });
@@ -47,6 +46,6 @@ export default async function calcBalances (st) {
   // console.log('totals:', st.data.totals);
 
   // display balances
-  displayBalances(st, totals);
+  displayBalances(st, newTotals);
 
 }

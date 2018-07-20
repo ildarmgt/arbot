@@ -1,7 +1,7 @@
 import numbers from 'numbers';
 import _ from 'lodash';
 
-import calcRefExchanges from './calcRefExchanges';
+import calcRefPrices from './calcRefPrices';
 
 /**
  * This function
@@ -17,7 +17,7 @@ export default function analyzeData (st, job, trades) {
   let lookBackTime = st.data.lookBackTime;
   let {coin1, coin2} = job;
   let pair = coin1 + '/' + coin2;
-  let refPrice = _.floor(calcRefExchanges(st)[pair], 8);
+  let refPrice = _.floor(calcRefPrices(st)[pair], 8);
 
   // initialize if necessary
   if (!st.data.history[pair]) st.data.history[pair] = {};

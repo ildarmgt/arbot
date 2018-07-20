@@ -2,7 +2,7 @@ import _ from 'lodash';
 import fs from 'fs';
 import csvWriter from 'csv-write-stream';
 
-import calcRefExchanges from './calcRefExchanges';
+import calcRefPrices from './calcRefPrices';
 
 /**
  * write new trade data to csv files
@@ -42,7 +42,7 @@ export default async function logTradesCSV (st, job, trades, mine) {
     writer.pipe(fs.createWriteStream(FILE_PATH, {flags: 'a'}));
 
     trades.forEach(trade => {
-      let refPrice = calcRefExchanges(st)[trade.symbol];
+      let refPrice = calcRefPrices(st)[trade.symbol];
       let tradePrice = trade.price;
       let offset = _.floor((tradePrice - refPrice) / refPrice * 100.0, 2);
 

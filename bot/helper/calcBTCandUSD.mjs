@@ -1,13 +1,13 @@
-import _ from 'lodash';
+// import _ from 'lodash';
 
-import calcRefExchanges from './calcRefExchanges';
+import calcRefPrices from './calcRefPrices';
 
 /**
  * Returns a modified totals object with
  * valueUSD and valueBTC added for each entry
  */
 export default function calcBTCandUSD (st, totals) {
-  let conversionFactors = calcRefExchanges(st);
+  let conversionFactors = calcRefPrices(st);
   let btcusd = conversionFactors['BTC/USD'];
   let altbtc;
 
