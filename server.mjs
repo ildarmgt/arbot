@@ -6,7 +6,7 @@ import State from './elements/State';
 let st = new State();
 
 // load the settings for initial set of bots
-// this will error out if there's no proper initialbots.json (see readme.md)
+// this will error out if there's no proper settings.json (see readme.md)
 initialBots(st);
 
 // initialize the operation
